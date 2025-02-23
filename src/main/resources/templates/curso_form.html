@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${curso.id} != null ? 'Editar Curso' : 'Crear Nuevo Curso'">
+      Crear Nuevo Curso
+    </title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Enlace al CSS usando th:href -->
+    <link rel="stylesheet" th:href="@{/css/curso_form.css}" />
+  </head>
+  <body>
+    <div class="container">
+      <h2 th:text="${curso.id} != null ? 'Editar Curso' : 'Crear Nuevo Curso'">
+        Crear Nuevo Curso
+      </h2>
+      <form th:action="@{/cursos}" th:object="${curso}" method="post" id="cursoForm" novalidate>
+        <input type="hidden" th:field="*{id}" />
+        <div class="form-container">
+          <div class="form-group">
+            <label for="descripcion">📌 Descripción:</label>
+            <input type="text" id="descripcion" th:field="*{descripcion}" placeholder="Ej: Curso de Matemáticas" required />
+            <span class="error-message"></span>
+          </div>
+          <div class="form-group">
+            <label for="activo">✅ Activo:</label>
+            <select id="activo" th:field="*{activo}" required>
+              <option value="" disabled selected>Seleccione</option>
+              <option value="true">Sí</option>
+              <option value="false">No</option>
+            </select>
+            <span class="error-message"></span>
+          </div>
+          <div class="form-group">
+            <label for="famCursoSelect">🏫 FamCurso:</label>
+            <select id="famCursoSelect" th:field="*{famCurso}" required>
+              <option value="" disabled selected>Seleccione un FamCurso</option>
+              <option th:each="fc : ${famCursos}" th:value="${fc.id}" th:text="${fc.descripcion}"></option>
+            </select>
+            <span class="error-message"></span>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit">💾 Guardar Curso</button>
+          <a th:href="@{/cursos}" class="cancel-button">❌ Cancelar</a>
+        </div>
+      </form>
+    </div>
+    <!-- Enlace al JavaScript usando th:src -->
+    <script th:src="@{/js/curso_form.js}"></script>
+  </body>
+</html>

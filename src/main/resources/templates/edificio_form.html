@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title th:text="${edificio.id} != null ? 'Editar Edificio' : 'Crear Nuevo Edificio'">
+      Formulario Edificio
+    </title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Enlace al CSS usando Thymeleaf para que genere la URL correcta -->
+    <link rel="stylesheet" th:href="@{/css/edificio_form.css}" />
+  </head>
+  <body>
+    <div class="background">
+      <div class="card">
+        <h2 th:text="${edificio.id} != null ? 'Editar Edificio' : 'Crear Nuevo Edificio'">
+          Formulario Edificio
+        </h2>
+
+        <form
+          th:action="@{/edificios}"
+          th:object="${edificio}"
+          method="post"
+          id="edificioForm"
+          novalidate
+        >
+          <input type="hidden" th:field="*{id}" />
+
+          <div class="grid-container">
+            <div class="form-group">
+              <label for="descripcion">🏢 Descripción:</label>
+              <input
+                type="text"
+                id="descripcion"
+                th:field="*{descripcion}"
+                placeholder="Ej: Edificio Principal"
+                required
+              />
+              <span class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="ubicacion">📍 Ubicación:</label>
+              <input
+                type="text"
+                id="ubicacion"
+                th:field="*{ubicacion}"
+                placeholder="Ej: Centro de la ciudad"
+                required
+              />
+              <span class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="naulas">🏫 Número de Aulas:</label>
+              <input
+                type="number"
+                id="naulas"
+                th:field="*{naulas}"
+                placeholder="Ej: 10"
+                min="0"
+              />
+              <span class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="npuertasacceso">🚪 Número de Puertas de Acceso:</label>
+              <input
+                type="number"
+                id="npuertasacceso"
+                th:field="*{npuertasacceso}"
+                placeholder="Ej: 4"
+                min="0"
+              />
+              <span class="error-message"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="activo">✅ Activo:</label>
+              <select id="activo" th:field="*{activo}" required>
+                <option value="" disabled selected>Seleccione una opción</option>
+                <option value="true">Sí</option>
+                <option value="false">No</option>
+              </select>
+              <span class="error-message"></span>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit">💾 Guardar Edificio</button>
+            <a th:href="@{/edificios}" class="cancel-button">❌ Cancelar</a>
+          </div>
+        </form>
+
+        <!-- Si se está editando (el edificio tiene ID), mostramos el botón para borrar -->
+        <div th:if="${edificio.id != null}" style="margin-top: 20px;">
+            <!-- Campo oculto para simular el método DELETE (si usas HiddenHttpMethodFilter en Spring) -->
+            <input type="hidden" name="_method" value="delete" />
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </body>
+</html>

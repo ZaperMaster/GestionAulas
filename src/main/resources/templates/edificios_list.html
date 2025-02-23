@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edificios 🏢</title>
+
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Enlace al CSS -->
+    <link rel="stylesheet" href="css/edificios_list.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Lista de Edificios 🏢</h1>
+    </header>
+
+    <!-- Contenedor de tarjetas -->
+    <div class="card-container">
+      <!-- Se genera una tarjeta por cada edificio -->
+      <div class="card" th:each="edificio : ${edificios}">
+        <div class="card-content">
+          <h2 th:text="${edificio.descripcion}">Descripción del Edificio</h2>
+          <p>
+            <strong>ID:</strong>
+            <span th:text="${edificio.id}">1</span>
+          </p>
+          <p>
+            <strong>Ubicación:</strong>
+            <span th:text="${edificio.ubicacion}">Ubicación</span>
+          </p>
+          <p>
+            <strong>Número de Aulas:</strong>
+            <span th:text="${edificio.naulas}">0</span>
+          </p>
+          <p>
+            <strong>Puertas de Acceso:</strong>
+            <span th:text="${edificio.npuertasacceso}">0</span>
+          </p>
+          <p>
+            <strong>Activo:</strong>
+            <span th:text="${edificio.activo} ? '✅ Activo' : '❌ Inactivo'">Estado</span>
+          </p>
+        </div>
+        <div class="card-actions">
+          <a th:href="@{'/edificios/editar/' + ${edificio.id}}" class="btn-edit">✏️ Editar</a>
+          <!-- Enlace para borrar el edificio -->
+          <a th:href="@{'/edificios/borrar/' + ${edificio.id}}" class="btn-delete"
+             onclick="return confirm('¿Estás seguro de borrar este edificio?')">🗑️ Borrar</a>
+        </div>
+      </div>
+      <!-- Fin de tarjeta -->
+    </div>
+
+    <!-- Contenedor de botones globales -->
+    <div class="btn-container">
+      <a th:href="@{/edificios/nuevo}" class="btn">➕ Crear Nuevo Edificio</a>
+      <a th:href="@{/menu}" class="btn-secondary">🏠 Volver al Menú</a>
+    </div>
+
+    <!-- (Opcional) Modal de confirmación si prefieres usar JavaScript avanzado -->
+    <div class="modal" id="confirm-modal" style="display: none;">
+      <div class="modal-content">
+        <p>⚠️ ¿Estás seguro de borrar este edificio?</p>
+        <button class="confirm">Sí, eliminar</button>
+        <button class="cancel">Cancelar</button>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${usuario.id} != null ? 'Editar Tipo de Usuario' : 'Crear Usuario'">
+      Editar Tipo de Usuario
+    </title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Enlace al CSS para estilos -->
+    <link rel="stylesheet" th:href="@{/css/usuario_form.css}" href="css/usuario_form.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2 th:text="${usuario.id} != null ? 'Editar Tipo de Usuario' : 'Crear Usuario'">
+        Editar Tipo de Usuario
+      </h2>
+      <form th:action="@{/usuarios/actualizar}" th:object="${usuario}" method="post" id="usuarioForm">
+        <!-- Campo oculto para el ID del usuario -->
+        <input type="hidden" th:field="*{id}" />
+        
+        <!-- Datos informativos (no editables) -->
+        <p>
+          <strong>Nombre:</strong>
+          <span th:text="${usuario.nombre}">Nombre</span>
+        </p>
+        <p>
+          <strong>Apellido:</strong>
+          <span th:text="${usuario.apellido}">Apellido</span>
+        </p>
+        <p>
+          <strong>Email:</strong>
+          <span th:text="${usuario.email}">email@ejemplo.com</span>
+        </p>
+        
+        <!-- Selección para cambiar el tipo de usuario -->
+        <!-- Nota: Aquí usamos el atributo 'name' para enviar el ID del tipo seleccionado -->
+        <div class="form-group">
+          <label for="tipoUsuarioId">Tipo de Usuario:</label>
+          <select id="tipoUsuarioId" name="tipoUsuarioId" required>
+            <option value="" disabled th:if="${usuario.tipoUsuario == null}" selected>
+              Seleccione un tipo de usuario
+            </option>
+            <!-- USER corresponde a 3 -->
+            <option value="3" th:selected="${usuario.tipoUsuario != null and usuario.tipoUsuario.id == 3}">
+              USER
+            </option>
+            <!-- ADMIN corresponde a 1 -->
+            <option value="1" th:selected="${usuario.tipoUsuario != null and usuario.tipoUsuario.id == 1}">
+              ADMIN
+            </option>
+          </select>
+          <span class="error-message"></span>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit">Guardar Cambios</button>
+          <a th:href="@{/usuarios}" class="cancel-button">Cancelar</a>
+        </div>
+      </form>
+    </div>
+    
+    <script th:src="@{/js/usuario_form.js}" src="js/usuario_form.js"></script>
+  </body>
+</html>

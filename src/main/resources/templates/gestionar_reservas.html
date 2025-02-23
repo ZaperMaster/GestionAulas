@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestionar Reservas</title>
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Enlace al CSS -->
+    <link rel="stylesheet" th:href="@{/css/gestionar_reservas.css}" />
+  </head>
+  <body>
+    <header>
+      <h1>Gestionar Reservas</h1>
+    </header>
+
+    <!-- Contenedor de tarjetas -->
+    <div class="card-container" th:if="${!#lists.isEmpty(reservas)}">
+      <!-- Tarjeta para cada reserva -->
+      <div class="card" th:each="reserva : ${reservas}">
+        <div class="card-content">
+          <p>
+            <strong>ID Reserva:</strong> 
+            <span th:text="${reserva.id}">1</span>
+          </p>
+          <p>
+            <strong>Aula:</strong>
+            <span th:text="${reserva.aula.nombreaula}">Aula</span>
+          </p>
+          <p>
+            <strong>Usuario:</strong>
+            <span th:text="${reserva.usuario.email}">usuario@example.com</span>
+          </p>
+          <p>
+            <strong>Curso:</strong>
+            <span th:text="${reserva.curso.descripcion}">Curso</span>
+          </p>
+          <p>
+            <strong>Fecha Inicio:</strong>
+            <span th:text="${reserva.fechainicio}">2025-01-01</span>
+          </p>
+          <p>
+            <strong>Fecha Fin:</strong>
+            <span th:text="${reserva.fechafin}">2025-01-10</span>
+          </p>
+          <p>
+            <strong>Hora Inicio:</strong>
+            <span th:text="${reserva.horainicio}">10:00</span>
+          </p>
+          <p>
+            <strong>Hora Fin:</strong>
+            <span th:text="${reserva.horafin}">12:00</span>
+          </p>
+          <p>
+            <strong>Estado Validación:</strong>
+            <!-- Se asume que se usa la propiedad "validar"; si no existe, se podría usar "activo" -->
+            <span th:text="${reserva.validar} == true ? 'Validado' : 'No validado'">
+              Estado
+            </span>
+          </p>
+        </div>
+        <div class="card-actions">
+          <a th:href="@{'/gestionarReservas/editar/' + ${reserva.id}}" class="btn-edit">
+            ✏️ Editar
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mensaje cuando no hay reservas -->
+    <div class="no-data" th:if="${#lists.isEmpty(reservas)}">
+      <p>No hay reservas disponibles.</p>
+    </div>
+
+    <footer>
+      <a th:href="@{/menu}" class="btn btn-back">🏠 Volver al Menú</a>
+    </footer>
+
+    <script src="js/gestionar_reservas.js"></script>
+  </body>
+</html>

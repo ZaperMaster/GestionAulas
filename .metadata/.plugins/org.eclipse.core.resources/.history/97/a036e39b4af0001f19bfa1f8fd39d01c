@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Aula Form</title>
+    <link rel="stylesheet" th:href="@{/css/menu.css}" />
+</head>
+<body>
+<div class="container">
+    <h2 th:text="${aula.id} != null ? 'Editar Aula' : 'Crear Nueva Aula'"></h2>
+    <form th:action="@{/aulas}" th:object="${aula}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <label for="nombreaula">Nombre del Aula:</label>
+        <input type="text" id="nombreaula" th:field="*{nombreaula}" placeholder="Ej: Aula 101" required />
+
+        <label for="descripcion">Descripción:</label>
+        <input type="text" id="descripcion" th:field="*{descripcion}" placeholder="Descripción" />
+
+        <label for="capacidad">Capacidad:</label>
+        <input type="number" id="capacidad" th:field="*{capacidad}" placeholder="Capacidad" />
+
+        <!-- Aquí se pueden agregar otros campos (proyector, smarttv, etc.) -->
+
+        <!-- Select de Edificio: se cargan los edificios -->
+        <label for="edificioSelect">Edificio:</label>
+        <select id="edificioSelect" name="edificio" data-plantas-url="@{/aulas/plantasPorEdificio}" required>
+            <option value="" disabled selected>Seleccione un edificio</option>
+            <option th:each="ed : ${edificios}"
+                    th:value="${ed.id}"
+                    th:text="${ed.descripcion}">Edificio</option>
+        </select>
+
+        <!-- Select de Planta: se actualizará vía AJAX según el edificio seleccionado -->
+        <label for="plantaSelect">Planta:</label>
+        <select id="plantaSelect" th:field="*{planta}" required>
+            <option value="" disabled selected>Seleccione una planta</option>
+            <!-- Si se cargaron plantas (por edición) se mostrarán aquí -->
+            <option th:each="pl : ${plantas}"
+                    th:value="${pl.id}"
+                    th:text="${pl.descripcion}">Planta</option>
+        </select>
+
+        <button type="submit">Guardar Aula</button>
+    </form>
+    <a th:href="@{/aulas}">Volver a la lista de aulas</a>
+</div>
+
+<script src="js/plantas.js"></script>
+</body>
+</html>

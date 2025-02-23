@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${subUsoAula.id} != null ? 'Editar Sub Uso de Aula' : 'Crear Nuevo Sub Uso de Aula'">
+      Formulario Sub Uso de Aula
+    </title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Enlace al CSS usando th:href para que Thymeleaf resuelva la ruta -->
+    <link rel="stylesheet" th:href="@{/css/subUsoAula_form.css}" />
+  </head>
+  <body>
+    <div class="container">
+      <h2 th:text="${subUsoAula.id} != null ? 'Editar Sub Uso de Aula' : 'Crear Nuevo Sub Uso de Aula'">
+        Formulario Sub Uso de Aula
+      </h2>
+
+      <form th:action="@{/subUsoAulas}" th:object="${subUsoAula}" method="post" id="subUsoAulaForm" novalidate>
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="form-container">
+          <div class="form-group">
+            <label for="descripcion">📌 Descripción:</label>
+            <input type="text" id="descripcion" th:field="*{descripcion}" placeholder="Ej: Aula Experimental" required />
+            <span class="error-message"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="activo">✅ Estado:</label>
+            <select id="activo" th:field="*{activo}" required>
+              <option value="" disabled selected>Seleccione una opción</option>
+              <option value="true">Activo</option>
+              <option value="false">Inactivo</option>
+            </select>
+            <span class="error-message"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="usoAulaSelect">📚 Uso de Aula:</label>
+            <select id="usoAulaSelect" th:field="*{usoAula}" required>
+              <option value="" disabled selected>Seleccione un Uso de Aula</option>
+              <option th:each="u : ${usoAulas}" th:value="${u.id}" th:text="${u.descripcion}"></option>
+            </select>
+            <span class="error-message"></span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit">💾 Guardar</button>
+          <a th:href="@{/subUsoAulas}" class="cancel-button">❌ Cancelar</a>
+        </div>
+      </form>
+    </div>
+
+    <script th:src="@{/js/subUsoAula_form.js}"></script>
+  </body>
+</html>

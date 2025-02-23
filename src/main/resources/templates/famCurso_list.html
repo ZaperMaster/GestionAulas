@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FamCursos 📚</title>
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Enlace al CSS -->
+    <link rel="stylesheet" href="css/famCurso_list.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Listado de FamCursos 📚</h1>
+    </header>
+
+    <!-- Contenedor de tarjetas -->
+    <div class="card-container">
+      <!-- Se genera una tarjeta por cada FamCurso -->
+      <div class="card" th:each="fc : ${famCursos}">
+        <div class="card-content">
+          <h2 th:text="${fc.descripcion}">Descripción del FamCurso</h2>
+          <p>
+            <strong>ID:</strong>
+            <span th:text="${fc.id}">1</span>
+          </p>
+          <p>
+            <strong>Activo:</strong>
+            <span th:text="${fc.activo} ? '✅ Activo' : '❌ Inactivo'">Estado</span>
+          </p>
+          <p>
+            <strong>Sub Uso Aula:</strong>
+            <span th:text="${fc.subUsoAula != null ? fc.subUsoAula.descripcion : 'Sin SubUsoAula'}">
+              Sin SubUsoAula
+            </span>
+          </p>
+        </div>
+        <div class="card-actions">
+          <a th:href="@{'/famCursos/editar/' + ${fc.id}}" class="btn-edit">✏️ Editar</a>
+          <!-- Botón de borrar como enlace con confirmación -->
+          <a th:href="@{'/famCursos/borrar/' + ${fc.id}}"
+             onclick="return confirm('¿Está seguro de borrar este FamCurso?');"
+             class="btn-delete">
+            🗑️ Borrar
+          </a>
+        </div>
+      </div>
+      <!-- Fin de la tarjeta -->
+    </div>
+
+    <!-- Contenedor de botones globales -->
+    <div class="btn-container">
+      <a th:href="@{/famCursos/nuevo}" class="btn">➕ Crear Nuevo FamCurso</a>
+      <a th:href="@{/menu}" class="btn-secondary">🏠 Volver al Menú</a>
+    </div>
+  </body>
+</html>

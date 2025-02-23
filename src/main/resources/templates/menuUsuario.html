@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menú Usuario - Edificios 🏢</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Enlace al CSS -->
+    <link
+      rel="stylesheet"
+      th:href="@{/css/menuUsuario.css}"
+      href="css/menuUsuario.css"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>Lista de Edificios 🏢</h1>
+    </header>
+
+    <!-- Contenedor de tarjetas -->
+    <div class="card-container">
+      <div th:if="${#lists.isEmpty(edificios)}">
+        <p>No hay edificios disponibles.</p>
+      </div>
+      <!-- Tarjeta por cada edificio -->
+      <div class="card" th:each="ed : ${edificios}">
+        <div class="card-content">
+          <h2 th:text="${ed.descripcion}">Nombre del Edificio</h2>
+          <p>
+            <strong>Ubicación:</strong>
+            <span th:text="${ed.ubicacion}">Ubicación</span>
+          </p>
+          <p>
+            <strong>Número de Aulas:</strong>
+            <span th:text="${ed.naulas}">0</span>
+          </p>
+          <p>
+            <strong>Número de Puertas de Acceso:</strong>
+            <span th:text="${ed.npuertasacceso}">0</span>
+          </p>
+        </div>
+        <div class="card-actions">
+          <a
+            th:href="@{'/menuUsuario/edificio/' + ${ed.id} + '/plantas'}"
+            class="btn"
+            >🏢 Ver Plantas</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenedor de botones inferiores -->
+    <div class="btn-container">
+      <!-- Botón para ir a "Mis Reservas" -->
+      <a th:href="@{/misreservas}" class="btn logout-link" style="margin-right: 1rem;">📆 Mis Reservas</a>
+      <!-- Botón de Cerrar Sesión -->
+      <a th:href="@{/login}" class="btn logout-link">🚪 Cerrar Sesión</a>
+    </div>
+  </body>
+</html>

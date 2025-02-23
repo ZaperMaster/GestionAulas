@@ -1,0 +1,121 @@
+:root {
+  --button-gradient-start: #1abc9c;
+  --button-gradient-end: #1abc9c;
+  --input-border: #bdc3c7; /* Gris metálico para los bordes */
+  --error-message-color: #e74c3c; /* Rojo para los mensajes de error */
+}
+
+/* Reset general */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: #fff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  background: #fff;
+  border-radius: 15px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.registro-form h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.registro-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.registro-form label {
+  color: #555;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+.registro-form input {
+  padding: 0.75rem;
+  margin-bottom: 0.25rem;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  outline: none;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.registro-form input:focus {
+  border-color: var(--button-gradient-end);
+  box-shadow: 0 0 0 2px rgba(26, 188, 156, 0.2);
+}
+
+/* Solo los inputs que hayan sido tocados y sean inválidos muestran borde de error */
+.registro-form input.touched:invalid {
+  border-color: var(--error-message-color);
+}
+
+.error-message {
+  font-size: 0.875rem;
+  color: var(--error-message-color);
+  margin-bottom: 0.75rem;
+  min-height: 1em;
+}
+
+.registro-form button {
+  padding: 0.75rem;
+  font-size: 1rem;
+  background: linear-gradient(
+    135deg,
+    var(--button-gradient-start),
+    var(--button-gradient-end)
+  );
+  border: none;
+  border-radius: 50px;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 0.5rem;
+}
+
+.registro-form button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.login-link {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.login-link p {
+  color: #333;
+}
+
+.login-link a {
+  color: var(--button-gradient-end);
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1.5rem;
+  }
+  .registro-form h2 {
+    font-size: 1.8rem;
+  }
+}

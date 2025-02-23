@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${aula.id} != null ? 'Editar Aula' : 'Crear Nueva Aula'">
+      Crear Nueva Aula
+    </title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Estilos Mejorados -->
+    <link rel="stylesheet" href="/css/aula_form.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2 th:text="${aula.id} != null ? 'Editar Aula' : 'Crear Nueva Aula'">
+        Crear Nueva Aula
+      </h2>
+
+      <form
+        th:action="@{/aulas}"
+        th:object="${aula}"
+        method="post"
+        id="aulaForm"
+        novalidate
+      >
+        <input type="hidden" th:field="*{id}" />
+
+        <div class="card">
+          <label>🎓 Nombre del Aula</label>
+          <input
+            type="text"
+            id="nombreaula"
+            th:field="*{nombreaula}"
+            placeholder="Ej: Aula 101"
+            required
+          />
+          <span class="error-message"></span>
+        </div>
+
+        <div class="card">
+          <label>📝 Descripción</label>
+          <input
+            type="text"
+            id="descripcion"
+            th:field="*{descripcion}"
+            placeholder="Ej: Aula con proyector"
+          />
+          <span class="error-message"></span>
+        </div>
+
+        <div class="card">
+          <label>👥 Capacidad</label>
+          <input
+            type="number"
+            id="capacidad"
+            th:field="*{capacidad}"
+            placeholder="Ej: 30"
+            min="1"
+            required
+          />
+          <span class="error-message"></span>
+        </div>
+
+        <div class="card">
+          <label>📽 ¿Tiene proyector?</label>
+          <select id="proyector" th:field="*{proyector}">
+            <option value="" disabled selected>Seleccione una opción</option>
+            <option value="SI">Sí</option>
+            <option value="NO">No</option>
+          </select>
+          <span class="error-message"></span>
+        </div>
+
+        <div class="card">
+          <label>🏢 Edificio</label>
+          <select id="edificioSelect" name="edificio" required>
+            <option value="" disabled selected>Seleccione un edificio</option>
+            <option
+              th:each="ed : ${edificios}"
+              th:value="${ed.id}"
+              th:text="${ed.descripcion}"
+            ></option>
+          </select>
+          <span class="error-message"></span>
+        </div>
+
+        <div class="card">
+          <label>📍 Planta</label>
+          <select id="plantaSelect" th:field="*{planta}" required>
+            <option value="" disabled selected>Seleccione una planta</option>
+            <option
+              th:each="pl : ${plantas}"
+              th:value="${pl.id}"
+              th:text="${pl.descripcion}"
+            ></option>
+          </select>
+          <span class="error-message"></span>
+        </div>
+
+        <button type="submit">🎉 Guardar Aula</button>
+      </form>
+
+      <div class="aula-link">
+        <p><a th:href="@{/aulas}">🔙 Volver a la lista de aulas</a></p>
+      </div>
+    </div>
+
+    <script src="js/aula_form.js"></script>
+  </body>
+</html>

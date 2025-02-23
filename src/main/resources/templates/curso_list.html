@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cursos 📚</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Enlace al CSS -->
+    <link rel="stylesheet" th:href="@{/css/curso_list.css}" />
+  </head>
+  <body>
+    <header>
+      <h1>Listado de Cursos 📚</h1>
+    </header>
+
+    <!-- Contenedor de tarjetas -->
+    <div class="card-container">
+      <!-- Se genera una tarjeta por cada curso -->
+      <div class="card" th:each="c : ${cursos}">
+        <div class="card-content">
+          <h2 th:text="${c.descripcion}">Nombre del Curso</h2>
+          <p>
+            <strong>ID:</strong>
+            <span th:text="${c.id}">1</span>
+          </p>
+          <p>
+            <strong>Estado:</strong>
+            <span class="status" 
+                  th:classappend="${c.activo} ? 'active' : 'inactive'"
+                  th:text="${c.activo} ? '✅ Activo' : '❌ Inactivo'">
+              Estado
+            </span>
+          </p>
+          <p>
+            <strong>FamCurso:</strong>
+            <span th:text="${c.famCurso != null ? c.famCurso.descripcion : 'Sin FamCurso'}">
+              Sin FamCurso
+            </span>
+          </p>
+        </div>
+        <div class="card-actions">
+          <a th:href="@{'/cursos/editar/' + ${c.id}}" class="btn-edit">📝 Editar</a>
+          <!-- Botón borrar convertido en enlace -->
+          <a th:href="@{'/cursos/borrar/' + ${c.id}}" 
+             class="btn-delete"
+             onclick="return confirm('¿Estás seguro de borrar este curso?');">
+            🗑️ Borrar
+          </a>
+        </div>
+      </div>
+      <!-- Fin de la tarjeta -->
+    </div>
+
+    <!-- Contenedor de botones inferiores -->
+    <div class="btn-container">
+      <a th:href="@{/cursos/nuevo}" class="btn">➕ Crear Nuevo Curso</a>
+      <a th:href="@{/menu}" class="btn">↩️ Volver al Menú</a>
+    </div>
+  </body>
+</html>

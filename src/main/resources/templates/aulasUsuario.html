@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aulas de [[${planta.descripcion}]]</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Ajusta la ruta a tu CSS real -->
+    <link
+      rel="stylesheet"
+      th:href="@{/css/aulasUsuario.css}"
+      href="css/aulasUsuario.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Título de la página -->
+      <h2>
+        🏫 Aulas de la planta
+        <span th:text="${planta.descripcion}">Planta</span>
+      </h2>
+
+      <!-- Si no hay aulas en esta planta -->
+      <div th:if="${#lists.isEmpty(aulas)}">
+        <p class="empty-message">
+          😞 No hay aulas disponibles para esta planta.
+        </p>
+      </div>
+
+      <!-- Contenedor en cuadrícula para las aulas -->
+      <div class="aulas-grid">
+        <!-- Recorremos la lista de aulas -->
+        <div th:each="aula : ${aulas}" class="aula-card">
+          <div class="aula-content">
+            <p>
+              📛 <strong>Nombre:</strong>
+              <span th:text="${aula.nombreaula}">Nombre</span>
+            </p>
+            <p>
+              👥 <strong>Capacidad:</strong>
+              <span th:text="${aula.capacidad}">0</span>
+            </p>
+            <!-- Puedes agregar más campos, ej.: proyector, smartTV, etc. -->
+          </div>
+          <!-- Botón para reservar el aula; redirige a la URL de reservas para el aula en cuestión -->
+          <a th:href="@{'/reservas/aula/' + ${aula.id}}" class="btn"
+            >✅ Reservar</a
+          >
+        </div>
+      </div>
+
+      <br />
+      <!-- Botón para volver a la vista de plantas de este edificio; redirige a la URL del menú de plantas -->
+      <a
+        th:href="@{'/menuUsuario/edificio/' + ${planta.edificio.id} + '/plantas'}"
+        class="btn volver-btn"
+      >
+        🔙 Volver
+      </a>
+    </div>
+  </body>
+</html>

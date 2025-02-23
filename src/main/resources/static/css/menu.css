@@ -1,0 +1,99 @@
+/* Estilos Generales */
+body {
+  font-family: "Poppins", Arial, sans-serif;
+  font-weight: 400;
+  background: #ecf0f1;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 360px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.container:hover {
+  transform: scale(1.02);
+}
+
+h1 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 24px;
+  font-weight: 700; /* Más bold */
+}
+
+/* Estilos de la Lista de Menú */
+.menu-list {
+  list-style: none;
+  padding: 0;
+}
+
+.menu-list li {
+  margin: 10px 0;
+}
+
+.menu-list a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: #2c3e50;
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 6px;
+  transition: all 0.3s;
+  font-size: 16px;
+  font-weight: 600; /* Más bold */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.menu-list a i {
+  margin-right: 10px;
+  color: #1abc9c;
+}
+
+.menu-list a:hover {
+  background: #1abc9c;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 3px 3px 10px rgba(26, 188, 156, 0.3);
+}
+
+.menu-list a:hover i {
+  color: white;
+}
+
+/* Estilos del Botón de Cierre de Sesión */
+.logout-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 18px;
+  background: #1abc9c;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.3s;
+  font-size: 16px;
+  font-weight: 700; /* Más bold */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.logout-btn i {
+  margin-right: 8px;
+}
+
+.logout-btn:hover {
+  background: #16a085;
+  transform: scale(1.1);
+  box-shadow: 4px 4px 15px rgba(26, 188, 156, 0.3);
+}

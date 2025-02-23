@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plantas 🌱</title>
+
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Enlace al CSS -->
+    <link rel="stylesheet" th:href="@{/css/plantas_list.css}" />
+  </head>
+  <body>
+    <header>
+      <h1>Lista de Plantas 🌱</h1>
+    </header>
+
+    <!-- Contenedor de tarjetas -->
+    <div class="card-container">
+      <!-- Se genera una tarjeta por cada planta -->
+      <div class="card" th:each="planta : ${plantas}">
+        <div class="card-content">
+          <h2 th:text="${planta.descripcion}">Descripción</h2>
+          <p>
+            <strong>ID:</strong>
+            <span th:text="${planta.id}">1</span>
+          </p>
+          <p>
+            <strong>Aulas Docentes:</strong>
+            <span th:text="${planta.naulasdocentes}">0</span>
+          </p>
+          <p>
+            <strong>Aulas Auxiliares:</strong>
+            <span th:text="${planta.naulaauxiliares}">0</span>
+          </p>
+          <p>
+            <strong>Estado:</strong>
+            <span th:text="${planta.activo} ? '✅ Activo' : '❌ Inactivo'">Estado</span>
+          </p>
+          <p>
+            <strong>Edificio:</strong>
+            <span th:text="${planta.edificio != null ? planta.edificio.descripcion : 'Sin Edificio'}">
+              Sin Edificio
+            </span>
+          </p>
+        </div>
+        <div class="card-actions">
+          <a th:href="@{'/plantas/editar/' + ${planta.id}}" class="btn-edit">✏️ Editar</a>
+          <!-- Botón de borrar utilizando un enlace con confirmación -->
+          <a th:href="@{'/plantas/borrar/' + ${planta.id}}"
+             onclick="return confirm('¿Estás seguro de borrar esta planta?');"
+             class="btn-delete">🗑️ Borrar</a>
+        </div>
+      </div>
+      <!-- Fin de tarjeta -->
+    </div>
+
+    <!-- Contenedor de botones globales -->
+    <div class="btn-container">
+      <a th:href="@{/plantas/nuevo}" class="btn">➕ Crear Nueva Planta</a>
+      <a th:href="@{/menu}" class="btn-secondary">🏠 Volver al Menú</a>
+    </div>
+
+    <!-- Enlace al JavaScript -->
+    <script src="js/plantas_list.js"></script>
+  </body>
+</html>

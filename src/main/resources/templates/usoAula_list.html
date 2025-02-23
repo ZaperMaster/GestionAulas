@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Usos de Aula 📋</title>
+
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Enlace al CSS -->
+    <link rel="stylesheet" href="css/usoAula_list.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Listado de Usos de Aula 📋</h1>
+    </header>
+
+    <!-- Contenedor de tarjetas -->
+    <div class="card-container">
+      <!-- Se genera una tarjeta por cada uso de aula -->
+      <div class="card" th:each="uso : ${usoAulas}">
+        <div class="card-content">
+          <h2 th:text="${uso.descripcion}">Descripción del Uso</h2>
+          <p>
+            <strong>ID:</strong>
+            <span th:text="${uso.id}">1</span>
+          </p>
+          <p>
+            <strong>Activo:</strong>
+            <span th:text="${uso.activo} ? '✅ Activo' : '❌ Inactivo'">Estado</span>
+          </p>
+        </div>
+        <div class="card-actions">
+          <a th:href="@{'/usoAulas/editar/' + ${uso.id}}" class="btn-edit">✏️ Editar</a>
+          <!-- Enlace para borrar con confirmación -->
+          <a th:href="@{'/usoAulas/borrar/' + ${uso.id}}" class="btn-delete"
+             onclick="return confirm('¿Estás seguro de borrar este Uso de Aula?');">🗑️ Borrar</a>
+        </div>
+      </div>
+      <!-- Fin de la tarjeta -->
+    </div>
+
+    <!-- Contenedor de botones globales -->
+    <div class="btn-container">
+      <a th:href="@{/usoAulas/nuevo}" class="btn">➕ Crear Nuevo Uso de Aula</a>
+      <a th:href="@{/menu}" class="btn-secondary">🏠 Volver al Menú</a>
+    </div>
+  </body>
+</html>

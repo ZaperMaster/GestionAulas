@@ -1,0 +1,135 @@
+/* Variables de colores */
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #1abc9c;
+  --background: #ffffff;
+  --text-color: #333;
+  --error-color: #dc3545;
+  --border-color: #bdc3c7;
+  --hover-secondary: #16a085;
+  --hover-error: #c82333;
+}
+
+/* Fuente y estilos generales */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+body {
+  font-family: "Poppins", sans-serif;
+  background: var(--background);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* Contenedor principal */
+.container {
+  max-width: 400px;
+  background: #f9f9f9;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Título */
+h2 {
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+/* Campos de información */
+.info-field {
+  background: #eef1f5;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-color);
+}
+
+/* Grupo de formulario */
+.form-group {
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: 500;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Botones */
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+button,
+.btn-cancel {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  text-align: center;
+}
+
+/* Botón "Guardar Cambios" */
+button {
+  background: var(--secondary-color);
+  color: white;
+  box-shadow: 0px 4px 8px rgba(26, 188, 156, 0.2);
+}
+
+button:hover {
+  background: var(--hover-secondary);
+  transform: scale(1.05);
+  box-shadow: 0px 6px 12px rgba(26, 188, 156, 0.3);
+}
+
+/* Botón "Cancelar" */
+.btn-cancel {
+  background: var(--error-color);
+  color: white;
+  box-shadow: 0px 4px 8px rgba(220, 53, 69, 0.2);
+}
+
+.btn-cancel:hover {
+  background: var(--hover-error);
+  transform: scale(1.05);
+  box-shadow: 0px 6px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  .container {
+    width: 90%;
+  }
+
+  button,
+  .btn-cancel {
+    font-size: 0.9rem;
+  }
+}

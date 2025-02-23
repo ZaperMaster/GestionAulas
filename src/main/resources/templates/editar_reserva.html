@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editar Reserva ✏️</title>
+    <link rel="stylesheet" th:href="@{/css/editar_reservas.css}" href="css/editar_reservas.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Editar Reserva ✏️</h2>
+      <form th:action="@{/gestionarReservas/editar}" th:object="${reserva}" method="post">
+        <!-- Campos ocultos para ID y asociaciones -->
+        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{aula.id}" />
+        <input type="hidden" th:field="*{usuario.id}" />
+        <input type="hidden" th:field="*{curso.id}" />
+        <!-- Campos ocultos para fechas y horas para conservar sus valores -->
+        <input type="hidden" th:field="*{fechainicio}" />
+        <input type="hidden" th:field="*{fechafin}" />
+        <input type="hidden" th:field="*{horainicio}" />
+        <input type="hidden" th:field="*{horafin}" />
+
+        <!-- Se muestran los datos en modo solo lectura -->
+        <div class="info-field">
+          <label>ID Reserva:</label>
+          <span th:text="${reserva.id}">ID</span>
+        </div>
+        <div class="info-field">
+          <label>Aula:</label>
+          <span th:text="${reserva.aula.nombreaula}">Aula</span>
+        </div>
+        <div class="info-field">
+          <label>Usuario:</label>
+          <span th:text="${reserva.usuario.email}">usuario@example.com</span>
+        </div>
+        <div class="info-field">
+          <label>Curso:</label>
+          <span th:text="${reserva.curso.descripcion}">Curso</span>
+        </div>
+        <div class="info-field">
+          <label>Fecha Inicio:</label>
+          <span th:text="${reserva.fechainicio}">2025-01-01</span>
+        </div>
+        <div class="info-field">
+          <label>Fecha Fin:</label>
+          <span th:text="${reserva.fechafin}">2025-01-10</span>
+        </div>
+        <div class="info-field">
+          <label>Hora Inicio:</label>
+          <span th:text="${reserva.horainicio}">10:00</span>
+        </div>
+        <div class="info-field">
+          <label>Hora Fin:</label>
+          <span th:text="${reserva.horafin}">12:00</span>
+        </div>
+
+        <!-- Campo editable para actualizar el estado de validación -->
+        <div class="form-group">
+          <label>Estado Validación:</label>
+          <select th:field="*{validar}" required>
+            <option value="1" th:selected="${reserva.validar == 1}">✅ Validado</option>
+            <option value="0" th:selected="${reserva.validar == 0 or reserva.validar == null}">❌ No validado</option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-save">💾 Guardar Cambios</button>
+          <a th:href="@{/gestionarReservas}" class="btn-cancel">❌ Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

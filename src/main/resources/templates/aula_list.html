@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aulas 🏫</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Enlace al CSS -->
+    <link rel="stylesheet" th:href="@{/css/aulas_list.css}" />
+  </head>
+  <body>
+    <header>
+      <h1>Lista de Aulas 🏫</h1>
+    </header>
+
+    <!-- Contenedor de tarjetas -->
+    <div class="card-container">
+      <!-- Se genera una tarjeta por cada aula -->
+      <div class="card" th:each="a : ${aulas}">
+        <div class="card-content">
+          <h2 th:text="${a.nombreaula}">Nombre del Aula</h2>
+          <p>
+            <strong>ID:</strong>
+            <span th:text="${a.id}">1</span>
+          </p>
+          <p>
+            <strong>Descripción:</strong>
+            <span th:text="${a.descripcion}">Descripción del Aula</span>
+          </p>
+          <p>
+            <strong>Capacidad:</strong>
+            <span th:text="${a.capacidad}">30</span>
+          </p>
+          <p>
+            <strong>Planta:</strong>
+            <span th:text="${a.planta != null ? a.planta.descripcion : 'Sin Planta'}">Sin Planta</span>
+          </p>
+          <p>
+            <strong>Edificio:</strong>
+            <span th:text="${a.planta != null ? a.planta.edificio.descripcion : 'Sin Edificio'}">Sin Edificio</span>
+          </p>
+        </div>
+        <div class="card-actions">
+          <a th:href="@{'/aulas/editar/' + ${a.id}}" class="btn-edit">📝 Editar</a>
+          <!-- Botón para borrar: se usa data-id para almacenar el id del aula -->
+          <button class="btn-delete" data-id="${a.id}">🗑️ Borrar</button>
+        </div>
+      </div>
+      <!-- Fin de la tarjeta -->
+    </div>
+
+    <!-- Contenedor de botones inferiores -->
+    <div class="btn-container">
+      <a th:href="@{/aulas/nuevo}" class="btn">➕ Crear Nueva Aula</a>
+      <a th:href="@{/menu}" class="btn">↩️ Volver al Menú</a>
+    </div>
+
+    <!-- (Opcional) Modal de confirmación si prefieres usarlo en lugar de confirm() -->
+    <!-- Puedes quitar este bloque si no lo usas -->
+    <div class="modal" id="confirm-modal" style="display:none;">
+      <div class="modal-content">
+        <p>⚠️ ¿Está seguro de borrar este Aula?</p>
+        <button class="confirm">Sí, eliminar</button>
+        <button class="cancel">Cancelar</button>
+      </div>
+    </div>
+
+  </body>
+</html>

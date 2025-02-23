@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservar Aula</title>
+    <!-- Usamos th:href para que Thymeleaf resuelva la ruta correctamente -->
+    <link rel="stylesheet" th:href="@{/css/reserva_form.css}" href="css/reserva_form.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Reservar Aula</h2>
+
+      <!-- Mensaje de error (opcional) -->
+      <div th:if="${error}">
+        <p class="error-message" th:text="${error}">Error</p>
+      </div>
+
+      <!-- Información del Aula (opcional) -->
+      <div th:if="${aula != null}">
+        <p><strong>Aula:</strong> <span th:text="${aula.nombreaula}">Aula X</span></p>
+        <p><strong>Capacidad:</strong> <span th:text="${aula.capacidad}">30</span></p>
+      </div>
+
+      <!-- Formulario de reserva vinculado al objeto Reserva -->
+      <form th:action="@{/reservas/procesar}" th:object="${reserva}" method="post" novalidate>
+        <!-- Campos ocultos para el ID del aula y del usuario (se asignan en el controlador) -->
+        <input type="hidden" th:field="*{aula.id}" />
+        <input type="hidden" th:field="*{usuario.id}" />
+
+        <div class="form-container">
+          <div class="form-group">
+            <label for="fechainicio">📅 Fecha Desde:</label>
+            <input type="date" id="fechainicio" th:field="*{fechainicio}" required />
+            <span class="error-message"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="fechafin">📅 Fecha Hasta:</label>
+            <input type="date" id="fechafin" th:field="*{fechafin}" required />
+            <span class="error-message"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="horainicio">⏰ Hora Desde:</label>
+            <input type="time" id="horainicio" th:field="*{horainicio}" required />
+            <span class="error-message"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="horafin">⏰ Hora Hasta:</label>
+            <input type="time" id="horafin" th:field="*{horafin}" required />
+            <span class="error-message"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="cursoId">📚 Curso:</label>
+            <select id="cursoId" name="cursoId" required>
+              <option value="" disabled selected>Seleccione un curso</option>
+              <option th:each="c : ${cursos}"
+                      th:value="${c.id}"
+                      th:text="${c.descripcion}">
+              </option>
+            </select>
+            <span class="error-message"></span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit">💾 Reservar</button>
+        </div>
+      </form>
+
+      <br />
+      <!-- Botón Volver redirige a la vista de "aulasUsuario" -->
+      <a th:href="@{/aulasUsuario}" class="btn">❌ Volver</a>
+    </div>
+
+    <!-- Enlace al archivo JavaScript -->
+    <script th:src="@{/js/reserva_form.js}" src="js/reserva_form.js"></script>
+  </body>
+</html>

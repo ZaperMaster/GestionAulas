@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>📆 Mis Reservas</title>
+    <link
+      rel="stylesheet"
+      th:href="@{/css/mis_reservas.css}"
+      href="css/mis_reservas.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h2>📌 Mis Reservas</h2>
+
+      <div th:if="${#lists.isEmpty(reservas)}" class="no-reservas">
+        <p>❌ No tienes reservas en este momento.</p>
+      </div>
+
+      <div th:if="${!#lists.isEmpty(reservas)}" class="reservas-grid">
+        <div th:each="reserva : ${reservas}" class="reserva-card">
+          <div class="reserva-header">
+            <h3>🆔 Reserva #<span th:text="${reserva.id}"></span></h3>
+            <p>📚 <span th:text="${reserva.curso.descripcion}"></span></p>
+          </div>
+          <div class="reserva-body">
+            <p>
+              🏫 <strong>Aula:</strong>
+              <span th:text="${reserva.aula.nombreaula}"></span>
+            </p>
+            <p>
+              📅 <strong>Fecha:</strong>
+              <span th:text="${reserva.fechainicio}"></span> -
+              <span th:text="${reserva.fechafin}"></span>
+            </p>
+            <p>
+              ⏰ <strong>Horario:</strong>
+              <span th:text="${reserva.horainicio}"></span> -
+              <span th:text="${reserva.horafin}"></span>
+            </p>
+          </div>
+          <div class="reserva-actions">
+            <a
+              th:href="@{'/reservas/editar/' + ${reserva.id}}"
+              class="btn btn-editar"
+              >✏️ Editar</a
+            >
+            <a
+              th:href="@{'/reservas/borrar/' + ${reserva.id}}"
+              class="btn btn-borrar borrar-btn"
+              data-id="${reserva.id}"
+              >🗑️ Borrar</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <a th:href="@{/menuUsuario}" class="btn btn-menu">🏠 Volver al Menú</a>
+    </div>
+
+    <script th:src="@{/js/mis_reservas.js}"></script>
+  </body>
+</html>

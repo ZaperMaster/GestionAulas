@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Usuarios</title>
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Enlace al CSS -->
+    <link rel="stylesheet" href="css/usuario_list.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Gestión de Usuarios</h1>
+      </header>
+
+      <section class="card-container">
+        <!-- Si no hay usuarios -->
+        <div th:if="${#lists.isEmpty(usuarios)}" class="no-data">
+          <p>No hay usuarios disponibles.</p>
+        </div>
+        <!-- Tarjeta para cada usuario -->
+        <div class="card" th:each="usuario : ${usuarios}">
+          <div class="card-content">
+            <p><strong>ID:</strong> <span th:text="${usuario.id}">1</span></p>
+            <p>
+              <strong>Email:</strong>
+              <span th:text="${usuario.email}">email@ejemplo.com</span>
+            </p>
+            <p>
+              <strong>Nombre:</strong>
+              <span th:text="${usuario.nombre}">Nombre</span>
+            </p>
+            <p>
+              <strong>Apellido:</strong>
+              <span th:text="${usuario.apellido}">Apellido</span>
+            </p>
+            <p>
+              <strong>Tipo de Usuario:</strong>
+              <span th:text="${usuario.tipoUsuario.tipo}">Tipo</span>
+            </p>
+          </div>
+          <div class="card-actions">
+            <a
+              th:href="@{'/usuarios/editar/' + ${usuario.id}}"
+              class="btn-edit"
+            >
+              ✏️ Editar Tipo
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <a th:href="@{/menu}" class="btn btn-back">🏠 Volver al Menú</a>
+      </footer>
+    </div>
+    <script src="js/usuario_list.js"></script>
+  </body>
+</html>

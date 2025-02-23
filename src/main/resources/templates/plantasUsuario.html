@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plantas de [[${edificio.descripcion}]] 🏢</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Enlace al CSS -->
+    <link
+      rel="stylesheet"
+      th:href="@{/css/plantasUsuario.css}"
+      href="css/plantasUsuario.css"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>
+        Plantas de <span th:text="${edificio.descripcion}">Edificio</span> 🏢
+      </h1>
+    </header>
+
+    <!-- Contenedor de tarjetas -->
+    <div class="card-container">
+      <div th:if="${#lists.isEmpty(plantas)}">
+        <p>No hay plantas disponibles para este edificio.</p>
+      </div>
+
+      <!-- Se genera una tarjeta por cada planta -->
+      <div class="card" th:each="pl : ${plantas}">
+        <div class="card-content">
+          <h2 th:text="${pl.descripcion}">Descripción de la Planta</h2>
+          <p>
+            <strong>Aulas Docentes:</strong>
+            <span th:text="${pl.naulasdocentes}">0</span>
+          </p>
+          <p>
+            <strong>Aulas Auxiliares:</strong>
+            <span th:text="${pl.naulaauxiliares}">0</span>
+          </p>
+        </div>
+        <div class="card-actions">
+          <a
+            th:href="@{'/menuUsuario/planta/' + ${pl.id} + '/aulas'}"
+            class="btn"
+            >🏫 Ver Aulas</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Contenedor de botones inferiores -->
+    <div class="btn-container">
+      <a th:href="@{/menuUsuario}" class="btn volver-link">↩️ Volver</a>
+    </div>
+  </body>
+</html>

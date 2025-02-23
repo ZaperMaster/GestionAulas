@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sub Uso Aulas 📋</title>
+
+    <!-- Google Fonts: Puedes usar la misma fuente que en tus otros archivos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Enlace al CSS -->
+    <link rel="stylesheet" href="css/subUsoAula_list.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Listado de Sub Uso Aulas 📋</h1>
+    </header>
+
+    <!-- Contenedor de tarjetas -->
+    <div class="card-container">
+      <!-- Se genera una tarjeta por cada Sub Uso Aula -->
+      <div class="card" th:each="subUso : ${subUsoAulas}">
+        <div class="card-content">
+          <h2 th:text="${subUso.descripcion}">Descripción</h2>
+          <p>
+            <strong>ID:</strong>
+            <span th:text="${subUso.id}">1</span>
+          </p>
+          <p>
+            <strong>Activo:</strong>
+            <span th:text="${subUso.activo} ? '✅ Activo' : '❌ Inactivo'">Estado</span>
+          </p>
+          <p>
+            <strong>Uso Aula:</strong>
+            <span th:text="${subUso.usoAula != null ? subUso.usoAula.descripcion : 'Sin UsoAula'}">
+              Sin UsoAula
+            </span>
+          </p>
+        </div>
+        <div class="card-actions">
+          <a th:href="@{'/subUsoAulas/editar/' + ${subUso.id}}" class="btn-edit">✏️ Editar</a>
+          <a th:href="@{'/subUsoAulas/borrar/' + ${subUso.id}}"
+             class="btn-delete"
+             onclick="return confirm('¿Está seguro de borrar este Sub Uso Aula?');">
+             🗑️ Borrar</a>
+        </div>
+      </div>
+      <!-- Fin de la tarjeta -->
+    </div>
+
+    <!-- Contenedor de botones globales -->
+    <div class="btn-container">
+      <a th:href="@{/subUsoAulas/nuevo}" class="btn">➕ Crear Nuevo Sub Uso Aula</a>
+      <a th:href="@{/menu}" class="btn-secondary">🏠 Volver al Menú</a>
+    </div>
+  </body>
+</html>
