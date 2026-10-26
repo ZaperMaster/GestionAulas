@@ -72,8 +72,8 @@
       </form>
 
       <br />
-      <!-- Botón Volver redirige a la vista de "aulasUsuario" -->
-      <a th:href="@{/aulasUsuario}" class="btn">❌ Volver</a>
+      <!-- Botón Volver: regresa a las aulas de la planta -->
+      <a th:href="@{'/menuUsuario/planta/' + ${aula.planta.id} + '/aulas'}" class="btn">❌ Volver</a>
     </div>
 
     <!-- Enlace al archivo JavaScript -->

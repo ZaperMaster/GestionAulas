@@ -55,6 +55,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public void save(Usuario usuario) {
-        guardarUsuario(usuario);
+        // Actualiza el usuario sin volver a cifrar la contraseña (ya está cifrada)
+        usuarioRepository.save(usuario);
     }
 }

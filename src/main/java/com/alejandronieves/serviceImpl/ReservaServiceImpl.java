@@ -35,7 +35,6 @@ public class ReservaServiceImpl implements ReservaService {
 
 	@Override
 	public List<Reserva> listByUserId(Long userioId) {
-		// TODO Auto-generated method stub
-		return null;
+		return reservaRepository.findByUsuarioId(userioId);
 	}
 }

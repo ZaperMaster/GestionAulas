@@ -59,7 +59,9 @@
       <!-- Botón para ir a "Mis Reservas" -->
       <a th:href="@{/misreservas}" class="btn logout-link" style="margin-right: 1rem;">📆 Mis Reservas</a>
       <!-- Botón de Cerrar Sesión -->
-      <a th:href="@{/login}" class="btn logout-link">🚪 Cerrar Sesión</a>
+      <form th:action="@{/logout}" method="post" style="display:inline;margin:0">
+          <button type="submit" class="btn logout-link" style="cursor:pointer">🚪 Cerrar Sesión</button>
+        </form>
     </div>
   </body>
 </html>

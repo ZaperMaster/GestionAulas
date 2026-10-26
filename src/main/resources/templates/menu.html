@@ -82,9 +82,9 @@
       </nav>
 
       <footer>
-        <a class="logout-btn" th:href="@{/login}" href="/login">
-          <i class="fas fa-sign-out-alt"></i> Cerrar Sesión 🔒
-        </a>
+        <form th:action="@{/logout}" method="post" style="display:inline;margin:0">
+          <button type="submit" class="logout-btn" style="cursor:pointer"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión 🔒</button>
+        </form>
         
       </footer>
     </div>

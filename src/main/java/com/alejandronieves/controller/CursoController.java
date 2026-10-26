@@ -65,7 +65,7 @@ public class CursoController {
     }
 
     // Borrar un Curso
-    @GetMapping("/borrar/{id}")
+    @PostMapping("/borrar/{id}")
     public String borrarCurso(@PathVariable("id") Long id) {
         cursoService.deleteById(id);
         return "redirect:/cursos";

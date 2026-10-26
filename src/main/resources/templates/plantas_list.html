@@ -53,9 +53,10 @@
         <div class="card-actions">
           <a th:href="@{'/plantas/editar/' + ${planta.id}}" class="btn-edit">✏️ Editar</a>
           <!-- Botón de borrar utilizando un enlace con confirmación -->
-          <a th:href="@{'/plantas/borrar/' + ${planta.id}}"
-             onclick="return confirm('¿Estás seguro de borrar esta planta?');"
-             class="btn-delete">🗑️ Borrar</a>
+          <form th:action="@{'/plantas/borrar/' + ${planta.id}}" method="post" style="display:inline;margin:0"
+                onsubmit="return confirm('¿Estás seguro de borrar esta planta?');">
+            <button type="submit" class="btn-delete">🗑️ Borrar</button>
+          </form>
         </div>
       </div>
       <!-- Fin de tarjeta -->

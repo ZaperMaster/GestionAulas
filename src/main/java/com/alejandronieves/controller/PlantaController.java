@@ -60,7 +60,7 @@ public class PlantaController {
     }
     
     // Borrar una planta
-    @GetMapping("/borrar/{id}")
+    @PostMapping("/borrar/{id}")
     public String borrarPlanta(@PathVariable("id") Long id) {
         plantaService.deleteById(id);
         return "redirect:/plantas";

@@ -99,13 +99,6 @@
           </div>
         </form>
 
-        <!-- Si se está editando (el edificio tiene ID), mostramos el botón para borrar -->
-        <div th:if="${edificio.id != null}" style="margin-top: 20px;">
-            <!-- Campo oculto para simular el método DELETE (si usas HiddenHttpMethodFilter en Spring) -->
-            <input type="hidden" name="_method" value="delete" />
-          </form>
-        </div>
-
       </div>
     </div>
   </body>

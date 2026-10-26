@@ -32,11 +32,15 @@ public class GestionReservasController {
         return "editar_reserva"; // Vista para validar (editar) la reserva
     }
 
-    // Procesa el formulario de edición/validación de reserva
+    // Procesa la validación: solo cambia el campo "validar" y conserva el resto de la reserva
     @PostMapping("/editar")
-    public String actualizarReserva(@ModelAttribute("reserva") Reserva reserva) {
-        // Aquí, se actualiza la reserva (por ejemplo, el campo "activo" que usaremos para validarla)
-        reservaService.save(reserva);
+    public String actualizarReserva(@RequestParam("id") Long id,
+                                    @RequestParam(value = "validar", required = false) Boolean validar) {
+        Reserva reserva = reservaService.findById(id);
+        if (reserva != null) {
+            reserva.setValidar(validar);
+            reservaService.save(reserva);
+        }
         return "redirect:/gestionarReservas";
     }
 }

@@ -78,7 +78,7 @@ public class AulaController {
     }
     
     // Método para borrar una aula
-    @GetMapping("/borrar/{id}")
+    @PostMapping("/borrar/{id}")
     public String borrarAula(@PathVariable("id") Long id) {
         aulaService.deleteById(id);
         return "redirect:/aulas";
