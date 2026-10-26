@@ -30,7 +30,7 @@ public class RegistroController {
                                    BindingResult bindingResult,
                                    Model model) {
         // Validar que el email no esté ya registrado
-        if (usuarioService.buscarPorEmail(usuario.getEmail()) != null) {
+        if (usuarioService.buscarPorEmail(usuario.getEmail()).isPresent()) {
             bindingResult.rejectValue("email", "error.usuario", "Ya existe un usuario con este email.");
         }
         

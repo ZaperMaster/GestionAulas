@@ -60,7 +60,7 @@ public class TipoAulaController {
     }
 
     // Borrar un tipo de aula, verificando dependencias
-    @GetMapping("/borrar/{id}")
+    @PostMapping("/borrar/{id}")
     public String borrarTipoAula(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         TipoAula tipoAula = tipoAulaService.findById(id);
         if (tipoAula == null) {

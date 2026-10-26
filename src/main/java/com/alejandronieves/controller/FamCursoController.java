@@ -65,7 +65,7 @@ public class FamCursoController {
     }
 
     // Borrar un FamCurso
-    @GetMapping("/borrar/{id}")
+    @PostMapping("/borrar/{id}")
     public String borrarFamCurso(@PathVariable("id") Long id) {
         famCursoService.deleteById(id);
         return "redirect:/famCursos";

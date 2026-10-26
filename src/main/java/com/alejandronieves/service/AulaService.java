@@ -9,6 +9,5 @@ public interface AulaService {
     Aula findById(Long id);
     void deleteById(Long id);
 	List<Aula> findByPlantaId(Long plantaId);
-	List<Aula> findByUsuarioId(Long id);
 	
 }

@@ -51,7 +51,7 @@ public class EdificioController {
     }
 
     // Borrar un edificio
-    @GetMapping("/borrar/{id}")
+    @PostMapping("/borrar/{id}")
     public String borrarEdificio(@PathVariable("id") Long id) {
         edificioService.deleteById(id);
         return "redirect:/edificios";

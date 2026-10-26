@@ -42,10 +42,10 @@
         </div>
         <div class="card-actions">
           <a th:href="@{'/tipoaulas/editar/' + ${ta.id}}" class="btn-edit">✏️ Editar</a>
-          <a th:href="@{'/tipoaulas/borrar/' + ${ta.id}}"
-             class="btn-delete"
-             onclick="return confirm('¿Está seguro de borrar este Tipo de Aula?');">
-             🗑️ Borrar</a>
+          <form th:action="@{'/tipoaulas/borrar/' + ${ta.id}}" method="post" style="display:inline;margin:0"
+                onsubmit="return confirm('¿Está seguro de borrar este Tipo de Aula?');">
+            <button type="submit" class="btn-delete">🗑️ Borrar</button>
+          </form>
         </div>
       </div>
       <!-- Fin de la tarjeta -->

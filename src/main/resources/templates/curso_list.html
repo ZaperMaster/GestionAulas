@@ -49,11 +49,10 @@
         <div class="card-actions">
           <a th:href="@{'/cursos/editar/' + ${c.id}}" class="btn-edit">📝 Editar</a>
           <!-- Botón borrar convertido en enlace -->
-          <a th:href="@{'/cursos/borrar/' + ${c.id}}" 
-             class="btn-delete"
-             onclick="return confirm('¿Estás seguro de borrar este curso?');">
-            🗑️ Borrar
-          </a>
+          <form th:action="@{'/cursos/borrar/' + ${c.id}}" method="post" style="display:inline;margin:0"
+                onsubmit="return confirm('¿Estás seguro de borrar este curso?');">
+            <button type="submit" class="btn-delete">🗑️ Borrar</button>
+          </form>
         </div>
       </div>
       <!-- Fin de la tarjeta -->

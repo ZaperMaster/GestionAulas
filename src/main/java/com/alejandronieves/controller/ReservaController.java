@@ -10,14 +10,11 @@ import com.alejandronieves.service.ReservaService;
 import com.alejandronieves.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/reservas")
@@ -25,25 +22,24 @@ public class ReservaController {
 
     @Autowired
     private ReservaService reservaService;
+
     @Autowired
     private AulaService aulaService;
+
     @Autowired
     private UsuarioService usuarioService;
+
     @Autowired
     private CursoService cursoService;
 
     // Muestra el formulario de reserva para un aula específico
     @GetMapping("/aula/{idAula}")
-    public String reservarAula(@PathVariable("idAula") Long idAula, Model model) {
+    public String reservarAula(@PathVariable("idAula") Long idAula, Model model, Authentication auth) {
         Aula aula = aulaService.findById(idAula);
         if (aula == null) {
             return "redirect:/menuUsuario";
         }
-
-        // Obtén el usuario real desde el contexto de seguridad
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String email = auth.getName(); // Se asume que el email es el username
-        Usuario usuarioLogueado = usuarioService.buscarPorEmail(email).orElse(null);
+        Usuario usuarioLogueado = usuarioService.buscarPorEmail(auth.getName()).orElse(null);
         if (usuarioLogueado == null) {
             return "redirect:/login";
         }
@@ -62,26 +58,34 @@ public class ReservaController {
         return "reserva_form"; // Vista Thymeleaf: reserva_form.html
     }
 
-    // Procesa el formulario de reserva (binding directo al objeto Reserva)
+    // Procesa el formulario de reserva
     @PostMapping("/procesar")
     public String procesarReserva(@ModelAttribute("reserva") Reserva reserva,
-                                  BindingResult result,
                                   @RequestParam("cursoId") Long cursoId,
-                                  Model model) {
-
-        // Asigna el curso a la reserva
+                                  Authentication auth) {
+        // El usuario siempre es el que ha iniciado sesión, nunca el que llegue en el formulario
+        Usuario usuario = usuarioService.buscarPorEmail(auth.getName()).orElse(null);
+        Aula aula = reserva.getAula() != null ? aulaService.findById(reserva.getAula().getId()) : null;
         Curso curso = cursoService.findById(cursoId);
+        if (usuario == null || aula == null || curso == null) {
+            return "redirect:/menuUsuario";
+        }
+        reserva.setId(null);
+        reserva.setUsuario(usuario);
+        reserva.setAula(aula);
         reserva.setCurso(curso);
-
-        // Marca la reserva como activa
         reserva.setActivo(true);
-
-        // (Opcional) Aquí podrías realizar validaciones adicionales
-
-        // Guarda la reserva en la base de datos
         reservaService.save(reserva);
+        return "redirect:/misreservas";
+    }
 
-        // Después de reservar, redirige al menú de usuario
-        return "redirect:/menuUsuario";
+    // Cancela una reserva propia
+    @PostMapping("/borrar/{id}")
+    public String cancelarReserva(@PathVariable("id") Long id, Authentication auth) {
+        Reserva reserva = reservaService.findById(id);
+        if (reserva != null && reserva.getUsuario().getEmail().equals(auth.getName())) {
+            reservaService.deleteById(id);
+        }
+        return "redirect:/misreservas";
     }
 }

@@ -86,9 +86,12 @@ public class SecurityConfig {
             .authenticationProvider(authenticationProvider)
             .authorizeRequests(authorize -> authorize
                 .antMatchers("/css/**", "/js/**", "/img/**", "/login", "/registro", "/error").permitAll()
-                // Se establece que /menu es solo para ADMIN y /menuUsuario para USER
-                .antMatchers("/menu").hasRole("ADMIN")
-                .antMatchers("/menuUsuario").hasRole("USER")
+                // Administración: solo ADMIN
+                .antMatchers("/menu", "/edificios/**", "/plantas/**", "/aulas/**", "/tipoaulas/**",
+                        "/usoAulas/**", "/subUsoAulas/**", "/famCursos/**", "/cursos/**",
+                        "/gestionarReservas/**", "/usuarios/**").hasRole("ADMIN")
+                // Zona de reservas: usuarios y administradores
+                .antMatchers("/menuUsuario/**", "/reservas/**", "/misreservas").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

@@ -57,7 +57,7 @@ public class UsoAulaController {
     }
 
     // Borrar un uso de aula
-    @GetMapping("/borrar/{id}")
+    @PostMapping("/borrar/{id}")
     public String borrarUsoAula(@PathVariable("id") Long id) {
         usoAulaService.deleteById(id);
         return "redirect:/usoAulas";

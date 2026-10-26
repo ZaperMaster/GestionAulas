@@ -40,17 +40,10 @@
             </p>
           </div>
           <div class="reserva-actions">
-            <a
-              th:href="@{'/reservas/editar/' + ${reserva.id}}"
-              class="btn btn-editar"
-              >✏️ Editar</a
-            >
-            <a
-              th:href="@{'/reservas/borrar/' + ${reserva.id}}"
-              class="btn btn-borrar borrar-btn"
-              data-id="${reserva.id}"
-              >🗑️ Borrar</a
-            >
+            <form th:action="@{'/reservas/borrar/' + ${reserva.id}}" method="post" style="display:inline;margin:0"
+                onsubmit="return confirm('¿Seguro que quieres cancelar esta reserva?');">
+            <button type="submit" class="btn btn-borrar borrar-btn">🗑️ Cancelar reserva</button>
+          </form>
           </div>
         </div>
       </div>
@@ -58,6 +51,5 @@
       <a th:href="@{/menuUsuario}" class="btn btn-menu">🏠 Volver al Menú</a>
     </div>
 
-    <script th:src="@{/js/mis_reservas.js}"></script>
   </body>
 </html>

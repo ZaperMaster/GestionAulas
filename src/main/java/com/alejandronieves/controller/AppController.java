@@ -1,31 +1,17 @@
 package com.alejandronieves.controller;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-
 
 @Controller
 public class AppController {
-	
-	
-	@Value("${aplicacion.nombre}")
-	private String titulo;
-	
-	
-	@GetMapping("/")
-	public String inicio(Model model) {
-		System.out.println("index: " + titulo);	
-		model.addAttribute("titulo", titulo);
-		return "index";
+
+	// La raíz lleva a cada usuario a su menú según su rol
+	@GetMapping({"/", "/home"})
+	public String inicio(Authentication auth) {
+		boolean isAdmin = auth.getAuthorities().stream()
+				.anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+		return isAdmin ? "redirect:/menu" : "redirect:/menuUsuario";
 	}
-	/*
-	@GetMapping("/")
-	public String inicio(Model model) {
-		model.addAttribute("titulo", "GGG");
-		return "index";
-	}
-	*/
 }

@@ -37,11 +37,5 @@ public class AulaServiceImpl implements AulaService {
     public List<Aula> findByPlantaId(Long plantaId) {
         return aulaRepository.findByPlantaId(plantaId);
     }
-
-	@Override
-	public List<Aula> findByUsuarioId(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}  
 }
 

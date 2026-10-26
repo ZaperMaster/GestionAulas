@@ -1,5 +1,6 @@
 package com.alejandronieves.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class Edificio {
     private Boolean activo;
 
     // Relación bidireccional: un edificio tiene muchas plantas.
+    @JsonIgnore
     @OneToMany(mappedBy = "edificio", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Planta> plantas;
 
