@@ -1,57 +1,50 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Usos de Aula 📋</title>
-
-    <!-- Google Fonts: Montserrat -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Enlace al CSS -->
-    <link rel="stylesheet" href="css/usoAula_list.css" />
-  </head>
-  <body>
-    <header>
-      <h1>Listado de Usos de Aula 📋</h1>
-    </header>
-
-    <!-- Contenedor de tarjetas -->
-    <div class="card-container">
-      <!-- Se genera una tarjeta por cada uso de aula -->
-      <div class="card" th:each="uso : ${usoAulas}">
-        <div class="card-content">
-          <h2 th:text="${uso.descripcion}">Descripción del Uso</h2>
-          <p>
-            <strong>ID:</strong>
-            <span th:text="${uso.id}">1</span>
-          </p>
-          <p>
-            <strong>Activo:</strong>
-            <span th:text="${uso.activo} ? '✅ Activo' : '❌ Inactivo'">Estado</span>
-          </p>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Usos de aula')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<div class="shell">
+  <aside th:replace="fragments/layout :: adminNav('usoAulas')"></aside>
+  <div>
+    <header th:replace="fragments/layout :: adminTopbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <div>
+          <p class="eyebrow">Formación</p>
+          <h1>Usos de aula</h1>
+          <p class="subtitle">Para qué se usan las aulas. Cada uso se divide en subusos.</p>
         </div>
-        <div class="card-actions">
-          <a th:href="@{'/usoAulas/editar/' + ${uso.id}}" class="btn-edit">✏️ Editar</a>
-          <!-- Enlace para borrar con confirmación -->
-          <form th:action="@{'/usoAulas/borrar/' + ${uso.id}}" method="post" style="display:inline;margin:0"
-                onsubmit="return confirm('¿Estás seguro de borrar este Uso de Aula?');">
-            <button type="submit" class="btn-delete">🗑️ Borrar</button>
-          </form>
+        <a class="btn btn-primary" th:href="@{/usoAulas/nuevo}"><svg class="icon"><use href="#i-plus"/></svg>Nuevo uso de aula</a>
+      </div>
+      <div th:replace="fragments/layout :: flash"></div>
+
+      <div class="card">
+        <div class="empty" th:if="${#lists.isEmpty(usoAulas)}">
+          <span class="empty-icon"><svg class="icon"><use href="#i-grid"/></svg></span>
+          <h3>Todavía no hay usos de aula</h3>
+          <p>Crea el primero con el botón de arriba.</p>
+          <a class="btn btn-primary" th:href="@{/usoAulas/nuevo}"><svg class="icon"><use href="#i-plus"/></svg>Nuevo uso de aula</a>
+        </div>
+        <div class="table-wrap" th:unless="${#lists.isEmpty(usoAulas)}">
+          <table class="table">
+            <thead><tr><th>Nombre</th><th>Estado</th><th><span class="sr-only">Acciones</span></th></tr></thead>
+            <tbody>
+              <tr th:each="uso : ${usoAulas}">
+                <td><div class="cell-title" th:text="${uso.descripcion}">Nombre</div><div class="id" th:text="'#' + ${uso.id}">#1</div></td>
+                <td><span th:replace="fragments/layout :: estado(${uso.activo})"></span></td>
+                <td class="actions">
+                  <a class="btn btn-ghost btn-sm btn-icon" th:href="@{'/usoAulas/editar/' + ${uso.id}}" title="Editar" aria-label="Editar"><svg class="icon"><use href="#i-edit"/></svg></a>
+                  <form th:action="@{'/usoAulas/borrar/' + ${uso.id}}" method="post" data-confirm="¿Borrar este uso de aula?">
+                    <button type="submit" class="btn btn-ghost btn-sm btn-icon btn-icon-danger" title="Borrar" aria-label="Borrar"><svg class="icon"><use href="#i-trash"/></svg></button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <!-- Fin de la tarjeta -->
-    </div>
-
-    <!-- Contenedor de botones globales -->
-    <div class="btn-container">
-      <a th:href="@{/usoAulas/nuevo}" class="btn">➕ Crear Nuevo Uso de Aula</a>
-      <a th:href="@{/menu}" class="btn-secondary">🏠 Volver al Menú</a>
-    </div>
-  </body>
+    </main>
+  </div>
+</div>
+</body>
 </html>

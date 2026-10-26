@@ -1,67 +1,41 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Menú Usuario - Edificios 🏢</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Enlace al CSS -->
-    <link
-      rel="stylesheet"
-      th:href="@{/css/menuUsuario.css}"
-      href="css/menuUsuario.css"
-    />
-  </head>
-  <body>
-    <header>
-      <h1>Lista de Edificios 🏢</h1>
-    </header>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Reservar aula')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<header th:replace="fragments/layout :: userNav('edificios')"></header>
+<main class="page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Paso 1 de 3</p>
+      <h1>Elige un edificio</h1>
+      <p class="subtitle">Selecciona el edificio, después la planta y, por último, el aula que quieres reservar.</p>
+    </div>
+    <a class="btn btn-secondary" th:href="@{/misreservas}"><svg class="icon"><use href="#i-calendar"/></svg>Mis reservas</a>
+  </div>
 
-    <!-- Contenedor de tarjetas -->
-    <div class="card-container">
-      <div th:if="${#lists.isEmpty(edificios)}">
-        <p>No hay edificios disponibles.</p>
+  <div class="card empty" th:if="${#lists.isEmpty(edificios)}">
+    <span class="empty-icon"><svg class="icon"><use href="#i-building"/></svg></span>
+    <h3>Todavía no hay edificios</h3>
+    <p>Cuando la administración dé de alta edificios y aulas, aparecerán aquí.</p>
+  </div>
+
+  <div class="grid-cards" th:unless="${#lists.isEmpty(edificios)}">
+    <a class="card place-card" th:each="ed, it : ${edificios}" th:href="@{'/menuUsuario/edificio/' + ${ed.id} + '/plantas'}" style="color: inherit; text-decoration: none">
+      <div class="place-cover" th:classappend="${it.index % 3 == 1} ? 'alt' : (${it.index % 3 == 2} ? 'alt2' : '')">
+        <svg class="icon"><use href="#i-building"/></svg>
       </div>
-      <!-- Tarjeta por cada edificio -->
-      <div class="card" th:each="ed : ${edificios}">
-        <div class="card-content">
-          <h2 th:text="${ed.descripcion}">Nombre del Edificio</h2>
-          <p>
-            <strong>Ubicación:</strong>
-            <span th:text="${ed.ubicacion}">Ubicación</span>
-          </p>
-          <p>
-            <strong>Número de Aulas:</strong>
-            <span th:text="${ed.naulas}">0</span>
-          </p>
-          <p>
-            <strong>Número de Puertas de Acceso:</strong>
-            <span th:text="${ed.npuertasacceso}">0</span>
-          </p>
-        </div>
-        <div class="card-actions">
-          <a
-            th:href="@{'/menuUsuario/edificio/' + ${ed.id} + '/plantas'}"
-            class="btn"
-            >🏢 Ver Plantas</a>
+      <div class="place-body">
+        <h3 th:text="${ed.descripcion}">Edificio</h3>
+        <div class="meta">
+          <span th:if="${ed.ubicacion}"><svg class="icon"><use href="#i-pin"/></svg><span th:text="${ed.ubicacion}">Ubicación</span></span>
+          <span th:if="${ed.naulas != null}"><svg class="icon"><use href="#i-door"/></svg><span th:text="${ed.naulas} + ' aulas'">0 aulas</span></span>
+          <span th:if="${ed.npuertasacceso != null}"><svg class="icon"><use href="#i-arrow-right"/></svg><span th:text="${ed.npuertasacceso} + ' accesos'">0 accesos</span></span>
         </div>
       </div>
-    </div>
-
-    <!-- Contenedor de botones inferiores -->
-    <div class="btn-container">
-      <!-- Botón para ir a "Mis Reservas" -->
-      <a th:href="@{/misreservas}" class="btn logout-link" style="margin-right: 1rem;">📆 Mis Reservas</a>
-      <!-- Botón de Cerrar Sesión -->
-      <form th:action="@{/logout}" method="post" style="display:inline;margin:0">
-          <button type="submit" class="btn logout-link" style="cursor:pointer">🚪 Cerrar Sesión</button>
-        </form>
-    </div>
-  </body>
+      <div class="place-foot"><span class="btn btn-ghost btn-sm">Ver plantas<svg class="icon"><use href="#i-arrow-right"/></svg></span></div>
+    </a>
+  </div>
+</main>
+</body>
 </html>

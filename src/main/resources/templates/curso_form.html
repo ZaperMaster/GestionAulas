@@ -1,59 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title th:text="${curso.id} != null ? 'Editar Curso' : 'Crear Nuevo Curso'">
-      Crear Nuevo Curso
-    </title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Enlace al CSS usando th:href -->
-    <link rel="stylesheet" th:href="@{/css/curso_form.css}" />
-  </head>
-  <body>
-    <div class="container">
-      <h2 th:text="${curso.id} != null ? 'Editar Curso' : 'Crear Nuevo Curso'">
-        Crear Nuevo Curso
-      </h2>
-      <form th:action="@{/cursos}" th:object="${curso}" method="post" id="cursoForm" novalidate>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head(${curso.id != null} ? 'Editar curso' : 'Nuevo curso')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<div class="shell">
+  <aside th:replace="fragments/layout :: adminNav('cursos')"></aside>
+  <div>
+    <header th:replace="fragments/layout :: adminTopbar"></header>
+    <main class="content">
+      <a class="back-link" th:href="@{/cursos}"><svg class="icon"><use href="#i-arrow-left"/></svg>Cursos</a>
+      <div class="page-header">
+        <div>
+          <h1 th:text="${curso.id != null} ? 'Editar curso' : 'Nuevo curso'">Nuevo curso</h1>
+          <p class="subtitle">Cursos que se imparten. Se eligen al hacer una reserva.</p>
+        </div>
+      </div>
+
+      <form class="card form-card" th:action="@{/cursos}" th:object="${curso}" method="post">
         <input type="hidden" th:field="*{id}" />
-        <div class="form-container">
-          <div class="form-group">
-            <label for="descripcion">📌 Descripción:</label>
-            <input type="text" id="descripcion" th:field="*{descripcion}" placeholder="Ej: Curso de Matemáticas" required />
-            <span class="error-message"></span>
-          </div>
-          <div class="form-group">
-            <label for="activo">✅ Activo:</label>
-            <select id="activo" th:field="*{activo}" required>
-              <option value="" disabled selected>Seleccione</option>
-              <option value="true">Sí</option>
-              <option value="false">No</option>
-            </select>
-            <span class="error-message"></span>
-          </div>
-          <div class="form-group">
-            <label for="famCursoSelect">🏫 FamCurso:</label>
-            <select id="famCursoSelect" th:field="*{famCurso}" required>
-              <option value="" disabled selected>Seleccione un FamCurso</option>
-              <option th:each="fc : ${famCursos}" th:value="${fc.id}" th:text="${fc.descripcion}"></option>
-            </select>
-            <span class="error-message"></span>
+        <div class="card-body">
+          <div class="alert alert-error" th:if="${#fields.hasAnyErrors()}" role="alert"><svg class="icon"><use href="#i-alert"/></svg><span>Revisa los datos del formulario.</span></div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="descripcion">Nombre</label>
+              <input type="text" id="descripcion" th:field="*{descripcion}" placeholder="Ej: 2º DAM" required />
+            </div>
+            <div class="field">
+              <label for="famCurso">Familia de cursos</label>
+              <select id="famCurso" name="famCurso" required>
+                <option value="" disabled th:selected="${curso.famCurso == null}">Selecciona una opción</option>
+                <option th:each="f : ${famCursos}" th:value="${f.id}" th:text="${f.descripcion}"
+                        th:selected="${curso.famCurso != null and curso.famCurso.id == f.id}">Opción</option>
+              </select>
+              <span class="hint" th:if="${#lists.isEmpty(famCursos)}">Primero tienes que <a th:href="@{/famCursos/nuevo}">crear una familia de cursos</a>.</span>
+            </div>
+            <div class="field full">
+              <label th:replace="fragments/layout :: switchActivo(${curso.id == null}, ${curso.activo})"></label>
+            </div>
           </div>
         </div>
         <div class="form-actions">
-          <button type="submit">💾 Guardar Curso</button>
-          <a th:href="@{/cursos}" class="cancel-button">❌ Cancelar</a>
+          <a class="btn btn-ghost" th:href="@{/cursos}">Cancelar</a>
+          <button type="submit" class="btn btn-primary"><svg class="icon"><use href="#i-check"/></svg>Guardar</button>
         </div>
       </form>
-    </div>
-    <!-- Enlace al JavaScript usando th:src -->
-    <script th:src="@{/js/curso_form.js}"></script>
-  </body>
+    </main>
+  </div>
+</div>
+</body>
 </html>

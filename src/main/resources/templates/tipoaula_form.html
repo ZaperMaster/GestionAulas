@@ -1,84 +1,46 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title
-      th:text="${tipoAula.id} != null ? 'Editar Tipo de Aula' : 'Crear Nuevo Tipo de Aula'"
-    >
-      Formulario Tipo de Aula
-    </title>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head(${tipoAula.id != null} ? 'Editar tipo de aula' : 'Nuevo tipo de aula')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<div class="shell">
+  <aside th:replace="fragments/layout :: adminNav('tipoaulas')"></aside>
+  <div>
+    <header th:replace="fragments/layout :: adminTopbar"></header>
+    <main class="content">
+      <a class="back-link" th:href="@{/tipoaulas}"><svg class="icon"><use href="#i-arrow-left"/></svg>Tipos de aula</a>
+      <div class="page-header">
+        <div>
+          <h1 th:text="${tipoAula.id != null} ? 'Editar tipo de aula' : 'Nuevo tipo de aula'">Nuevo tipo de aula</h1>
+          <p class="subtitle">Clasificación de las aulas: informática, laboratorio, salón de actos…</p>
+        </div>
+      </div>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Estilos de la plantilla -->
-    <link rel="stylesheet" href="css/tipoaula_form.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h2
-        th:text="${tipoAula.id} != null ? 'Editar Tipo de Aula' : 'Crear Nuevo Tipo de Aula'"
-      >
-        Formulario Tipo de Aula
-      </h2>
-
-      <form
-        th:action="@{/tipoaulas}"
-        th:object="${tipoAula}"
-        method="post"
-        id="tipoAulaForm"
-        novalidate
-      >
+      <form class="card form-card" th:action="@{/tipoaulas}" th:object="${tipoAula}" method="post">
         <input type="hidden" th:field="*{id}" />
-
-        <div class="form-container">
-          <div class="form-group">
-            <label for="nombretipo">📛 Nombre Tipo:</label>
-            <input
-              type="text"
-              id="nombretipo"
-              th:field="*{nombretipo}"
-              placeholder="Ej: Aula de Conferencias"
-              required
-            />
-            <span class="error-message"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="descripcion">📝 Descripción:</label>
-            <input
-              type="text"
-              id="descripcion"
-              th:field="*{descripcion}"
-              placeholder="Ej: Aula equipada para conferencias"
-            />
-            <span class="error-message"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="activo">✅ Estado:</label>
-            <select id="activo" th:field="*{activo}" required>
-              <option value="" disabled selected>Seleccione una opción</option>
-              <option value="true">Activo</option>
-              <option value="false">Inactivo</option>
-            </select>
-            <span class="error-message"></span>
+        <div class="card-body">
+          <div class="alert alert-error" th:if="${#fields.hasAnyErrors()}" role="alert"><svg class="icon"><use href="#i-alert"/></svg><span>Revisa los datos del formulario.</span></div>
+          <div class="form-grid">
+            <div class="field full">
+              <label for="nombretipo">Nombre</label>
+              <input type="text" id="nombretipo" th:field="*{nombretipo}" placeholder="Ej: Laboratorio" required />
+            </div>
+            <div class="field full">
+              <label for="descripcion">Descripción</label>
+              <input type="text" id="descripcion" th:field="*{descripcion}" placeholder="Ej: Aula con bancos de trabajo y tomas de gas" />
+            </div>
+            <div class="field full">
+              <label th:replace="fragments/layout :: switchActivo(${tipoAula.id == null}, ${tipoAula.activo})"></label>
+            </div>
           </div>
         </div>
-
         <div class="form-actions">
-          <button type="submit">💾 Guardar</button>
-          <a th:href="@{/tipoaulas}" class="cancel-button">❌ Cancelar</a>
+          <a class="btn btn-ghost" th:href="@{/tipoaulas}">Cancelar</a>
+          <button type="submit" class="btn btn-primary"><svg class="icon"><use href="#i-check"/></svg>Guardar</button>
         </div>
       </form>
-    </div>
-
-    <script src="js/tipoaula_form.js"></script>
-  </body>
+    </main>
+  </div>
+</div>
+</body>
 </html>

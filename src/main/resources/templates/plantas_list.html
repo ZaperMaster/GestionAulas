@@ -1,74 +1,53 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Plantas 🌱</title>
-
-    <!-- Google Fonts: Montserrat -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Enlace al CSS -->
-    <link rel="stylesheet" th:href="@{/css/plantas_list.css}" />
-  </head>
-  <body>
-    <header>
-      <h1>Lista de Plantas 🌱</h1>
-    </header>
-
-    <!-- Contenedor de tarjetas -->
-    <div class="card-container">
-      <!-- Se genera una tarjeta por cada planta -->
-      <div class="card" th:each="planta : ${plantas}">
-        <div class="card-content">
-          <h2 th:text="${planta.descripcion}">Descripción</h2>
-          <p>
-            <strong>ID:</strong>
-            <span th:text="${planta.id}">1</span>
-          </p>
-          <p>
-            <strong>Aulas Docentes:</strong>
-            <span th:text="${planta.naulasdocentes}">0</span>
-          </p>
-          <p>
-            <strong>Aulas Auxiliares:</strong>
-            <span th:text="${planta.naulaauxiliares}">0</span>
-          </p>
-          <p>
-            <strong>Estado:</strong>
-            <span th:text="${planta.activo} ? '✅ Activo' : '❌ Inactivo'">Estado</span>
-          </p>
-          <p>
-            <strong>Edificio:</strong>
-            <span th:text="${planta.edificio != null ? planta.edificio.descripcion : 'Sin Edificio'}">
-              Sin Edificio
-            </span>
-          </p>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Plantas')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<div class="shell">
+  <aside th:replace="fragments/layout :: adminNav('plantas')"></aside>
+  <div>
+    <header th:replace="fragments/layout :: adminTopbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <div>
+          <p class="eyebrow">Infraestructura</p>
+          <h1>Plantas</h1>
+          <p class="subtitle">Plantas de cada edificio y el número de aulas que tienen.</p>
         </div>
-        <div class="card-actions">
-          <a th:href="@{'/plantas/editar/' + ${planta.id}}" class="btn-edit">✏️ Editar</a>
-          <!-- Botón de borrar utilizando un enlace con confirmación -->
-          <form th:action="@{'/plantas/borrar/' + ${planta.id}}" method="post" style="display:inline;margin:0"
-                onsubmit="return confirm('¿Estás seguro de borrar esta planta?');">
-            <button type="submit" class="btn-delete">🗑️ Borrar</button>
-          </form>
+        <a class="btn btn-primary" th:href="@{/plantas/nuevo}"><svg class="icon"><use href="#i-plus"/></svg>Nueva planta</a>
+      </div>
+      <div th:replace="fragments/layout :: flash"></div>
+
+      <div class="card">
+        <div class="empty" th:if="${#lists.isEmpty(plantas)}">
+          <span class="empty-icon"><svg class="icon"><use href="#i-layers"/></svg></span>
+          <h3>No hay plantas</h3>
+          <p>Crea una planta y asígnala a un edificio.</p>
+          <a class="btn btn-primary" th:href="@{/plantas/nuevo}"><svg class="icon"><use href="#i-plus"/></svg>Nueva planta</a>
+        </div>
+        <div class="table-wrap" th:unless="${#lists.isEmpty(plantas)}">
+          <table class="table">
+            <thead><tr><th>Planta</th><th>Edificio</th><th class="num">Aulas docentes</th><th class="num">Auxiliares</th><th>Estado</th><th><span class="sr-only">Acciones</span></th></tr></thead>
+            <tbody>
+              <tr th:each="planta : ${plantas}">
+                <td><div class="cell-title" th:text="${planta.descripcion}">Planta</div><div class="id" th:text="'#' + ${planta.id}">#1</div></td>
+                <td th:text="${planta.edificio != null ? planta.edificio.descripcion : '—'}">Edificio</td>
+                <td class="num" th:text="${planta.naulasdocentes} ?: '—'">0</td>
+                <td class="num" th:text="${planta.naulaauxiliares} ?: '—'">0</td>
+                <td><span th:replace="fragments/layout :: estado(${planta.activo})"></span></td>
+                <td class="actions">
+                  <a class="btn btn-ghost btn-sm btn-icon" th:href="@{'/plantas/editar/' + ${planta.id}}" title="Editar" aria-label="Editar"><svg class="icon"><use href="#i-edit"/></svg></a>
+                  <form th:action="@{'/plantas/borrar/' + ${planta.id}}" method="post" data-confirm="¿Borrar esta planta?">
+                    <button type="submit" class="btn btn-ghost btn-sm btn-icon btn-icon-danger" title="Borrar" aria-label="Borrar"><svg class="icon"><use href="#i-trash"/></svg></button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <!-- Fin de tarjeta -->
-    </div>
-
-    <!-- Contenedor de botones globales -->
-    <div class="btn-container">
-      <a th:href="@{/plantas/nuevo}" class="btn">➕ Crear Nueva Planta</a>
-      <a th:href="@{/menu}" class="btn-secondary">🏠 Volver al Menú</a>
-    </div>
-
-    <!-- Enlace al JavaScript -->
-    <script src="js/plantas_list.js"></script>
-  </body>
+    </main>
+  </div>
+</div>
+</body>
 </html>

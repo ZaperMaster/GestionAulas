@@ -1,118 +1,98 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title th:text="${aula.id} != null ? 'Editar Aula' : 'Crear Nueva Aula'">
-      Crear Nueva Aula
-    </title>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Estilos Mejorados -->
-    <link rel="stylesheet" href="/css/aula_form.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h2 th:text="${aula.id} != null ? 'Editar Aula' : 'Crear Nueva Aula'">
-        Crear Nueva Aula
-      </h2>
-
-      <form
-        th:action="@{/aulas}"
-        th:object="${aula}"
-        method="post"
-        id="aulaForm"
-        novalidate
-      >
-        <input type="hidden" th:field="*{id}" />
-
-        <div class="card">
-          <label>🎓 Nombre del Aula</label>
-          <input
-            type="text"
-            id="nombreaula"
-            th:field="*{nombreaula}"
-            placeholder="Ej: Aula 101"
-            required
-          />
-          <span class="error-message"></span>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head(${aula.id != null} ? 'Editar aula' : 'Nueva aula')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<div class="shell">
+  <aside th:replace="fragments/layout :: adminNav('aulas')"></aside>
+  <div>
+    <header th:replace="fragments/layout :: adminTopbar"></header>
+    <main class="content">
+      <a class="back-link" th:href="@{/aulas}"><svg class="icon"><use href="#i-arrow-left"/></svg>Aulas</a>
+      <div class="page-header">
+        <div>
+          <h1 th:text="${aula.id != null} ? 'Editar aula' : 'Nueva aula'">Nueva aula</h1>
+          <p class="subtitle">Datos del aula, dónde está y con qué equipamiento cuenta.</p>
         </div>
-
-        <div class="card">
-          <label>📝 Descripción</label>
-          <input
-            type="text"
-            id="descripcion"
-            th:field="*{descripcion}"
-            placeholder="Ej: Aula con proyector"
-          />
-          <span class="error-message"></span>
-        </div>
-
-        <div class="card">
-          <label>👥 Capacidad</label>
-          <input
-            type="number"
-            id="capacidad"
-            th:field="*{capacidad}"
-            placeholder="Ej: 30"
-            min="1"
-            required
-          />
-          <span class="error-message"></span>
-        </div>
-
-        <div class="card">
-          <label>📽 ¿Tiene proyector?</label>
-          <select id="proyector" th:field="*{proyector}">
-            <option value="" disabled selected>Seleccione una opción</option>
-            <option value="SI">Sí</option>
-            <option value="NO">No</option>
-          </select>
-          <span class="error-message"></span>
-        </div>
-
-        <div class="card">
-          <label>🏢 Edificio</label>
-          <select id="edificioSelect" name="edificio" required>
-            <option value="" disabled selected>Seleccione un edificio</option>
-            <option
-              th:each="ed : ${edificios}"
-              th:value="${ed.id}"
-              th:text="${ed.descripcion}"
-            ></option>
-          </select>
-          <span class="error-message"></span>
-        </div>
-
-        <div class="card">
-          <label>📍 Planta</label>
-          <select id="plantaSelect" th:field="*{planta}" required>
-            <option value="" disabled selected>Seleccione una planta</option>
-            <option
-              th:each="pl : ${plantas}"
-              th:value="${pl.id}"
-              th:text="${pl.descripcion}"
-            ></option>
-          </select>
-          <span class="error-message"></span>
-        </div>
-
-        <button type="submit">🎉 Guardar Aula</button>
-      </form>
-
-      <div class="aula-link">
-        <p><a th:href="@{/aulas}">🔙 Volver a la lista de aulas</a></p>
       </div>
-    </div>
 
-    <script src="js/aula_form.js"></script>
-  </body>
+      <form class="card form-card" th:action="@{/aulas}" th:object="${aula}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        <div class="card-body">
+          <div class="alert alert-error" th:if="${#fields.hasAnyErrors()}" role="alert"><svg class="icon"><use href="#i-alert"/></svg><span>Revisa los datos del formulario.</span></div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="nombreaula">Nombre</label>
+              <input type="text" id="nombreaula" th:field="*{nombreaula}" placeholder="Ej: A-101" required />
+            </div>
+            <div class="field">
+              <label for="capacidad">Capacidad</label>
+              <input type="number" id="capacidad" th:field="*{capacidad}" placeholder="Ej: 30" min="1" required />
+            </div>
+            <div class="field full">
+              <label for="descripcion">Descripción</label>
+              <input type="text" id="descripcion" th:field="*{descripcion}" placeholder="Ej: Aula de informática con 30 equipos" />
+            </div>
+            <div class="field">
+              <label for="tipoAula">Tipo de aula</label>
+              <select id="tipoAula" name="tipoAula">
+                <option value="" th:selected="${aula.tipoAula == null}">Sin tipo</option>
+                <option th:each="t : ${tipoAulas}" th:value="${t.id}" th:text="${t.nombretipo}"
+                        th:selected="${aula.tipoAula != null and aula.tipoAula.id == t.id}">Tipo</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="nenchufes">Enchufes</label>
+              <input type="number" id="nenchufes" th:field="*{nenchufes}" placeholder="Ej: 12" min="0" />
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Ubicación</h3>
+            <p>Al elegir el edificio se cargan solo sus plantas.</p>
+            <div class="form-grid">
+              <div class="field">
+                <label for="edificio">Edificio</label>
+                <select id="edificio" th:attr="data-plantas-url=@{/aulas/plantasPorEdificio}">
+                  <option value="" disabled th:selected="${aula.planta == null}">Selecciona un edificio</option>
+                  <option th:each="ed : ${edificios}" th:value="${ed.id}" th:text="${ed.descripcion}"
+                          th:selected="${aula.planta != null and aula.planta.edificio != null and aula.planta.edificio.id == ed.id}">Edificio</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="planta">Planta</label>
+                <select id="planta" name="planta" required>
+                  <option value="" disabled th:selected="${aula.planta == null}">Selecciona una planta</option>
+                  <option th:each="pl : ${plantas}" th:value="${pl.id}" th:text="${pl.descripcion}"
+                          th:selected="${aula.planta != null and aula.planta.id == pl.id}">Planta</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Equipamiento</h3>
+            <p>Marca lo que tiene el aula. Los usuarios lo verán al reservar.</p>
+            <div class="checks">
+              <label class="check"><input type="checkbox" th:field="*{proyector}" /><svg class="icon"><use href="#i-projector"/></svg>Proyector</label>
+              <label class="check"><input type="checkbox" th:field="*{smarttv}" /><svg class="icon"><use href="#i-tv"/></svg>Smart TV</label>
+              <label class="check"><input type="checkbox" th:field="*{hdmi}" /><svg class="icon"><use href="#i-cable"/></svg>HDMI</label>
+              <label class="check"><input type="checkbox" th:field="*{appletv}" /><svg class="icon"><use href="#i-tv"/></svg>Apple TV</label>
+              <label class="check"><input type="checkbox" th:field="*{aireacondicionado}" /><svg class="icon"><use href="#i-snow"/></svg>Aire acondicionado</label>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <label th:replace="fragments/layout :: switchActivo(${aula.id == null}, ${aula.activo})"></label>
+          </div>
+        </div>
+        <div class="form-actions">
+          <a class="btn btn-ghost" th:href="@{/aulas}">Cancelar</a>
+          <button type="submit" class="btn btn-primary"><svg class="icon"><use href="#i-check"/></svg>Guardar</button>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>
+</body>
 </html>

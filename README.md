@@ -8,7 +8,7 @@ Aplicación web para gestionar los edificios, plantas y aulas de un centro educa
 
 ### Usuario
 - Registro con DNI, nombre, email, contraseña y teléfono.
-- Navegación **edificio → planta → aula**, con la capacidad de cada aula.
+- Navegación **edificio → planta → aula**, con la capacidad, el tipo y el equipamiento de cada aula.
 - Reserva de un aula para un curso, con fecha y horario.
 - **Mis reservas**: consulta y cancelación de las reservas propias.
 
@@ -17,6 +17,12 @@ Aplicación web para gestionar los edificios, plantas y aulas de un centro educa
   usos y subusos de aula, familias de cursos y cursos.
 - **Gestionar reservas**: lista de todas las reservas y validación.
 - **Gestión de usuarios**: cambio de rol entre usuario y administrador.
+
+### Interfaz
+- Diseño común para toda la aplicación: menú lateral en el panel de administración y barra
+  superior en la zona de reservas, con modo claro y oscuro automático y adaptada a móvil.
+- Panel de administración con resumen y validación rápida de las reservas pendientes.
+- Reserva guiada en tres pasos (edificio → planta → aula) con el equipamiento de cada aula.
 
 ### Seguridad
 - Contraseñas cifradas con **BCrypt**.
@@ -105,7 +111,8 @@ src/main/java/com/alejandronieves/
 src/main/resources/
 ├── application.properties
 ├── templates/                     Vistas Thymeleaf
-└── static/                        CSS y JavaScript
+│   └── fragments/layout.html      Cabecera, menús, iconos y piezas comunes
+└── static/                        app.css y app.js (estilos y comportamiento comunes)
 mysql/gestoraulas.sql              Script de la base de datos
 ```
 

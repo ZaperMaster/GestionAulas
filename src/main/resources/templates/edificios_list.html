@@ -1,78 +1,53 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Edificios 🏢</title>
-
-    <!-- Google Fonts: Montserrat -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Enlace al CSS -->
-    <link rel="stylesheet" href="css/edificios_list.css" />
-  </head>
-  <body>
-    <header>
-      <h1>Lista de Edificios 🏢</h1>
-    </header>
-
-    <!-- Contenedor de tarjetas -->
-    <div class="card-container">
-      <!-- Se genera una tarjeta por cada edificio -->
-      <div class="card" th:each="edificio : ${edificios}">
-        <div class="card-content">
-          <h2 th:text="${edificio.descripcion}">Descripción del Edificio</h2>
-          <p>
-            <strong>ID:</strong>
-            <span th:text="${edificio.id}">1</span>
-          </p>
-          <p>
-            <strong>Ubicación:</strong>
-            <span th:text="${edificio.ubicacion}">Ubicación</span>
-          </p>
-          <p>
-            <strong>Número de Aulas:</strong>
-            <span th:text="${edificio.naulas}">0</span>
-          </p>
-          <p>
-            <strong>Puertas de Acceso:</strong>
-            <span th:text="${edificio.npuertasacceso}">0</span>
-          </p>
-          <p>
-            <strong>Activo:</strong>
-            <span th:text="${edificio.activo} ? '✅ Activo' : '❌ Inactivo'">Estado</span>
-          </p>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Edificios')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<div class="shell">
+  <aside th:replace="fragments/layout :: adminNav('edificios')"></aside>
+  <div>
+    <header th:replace="fragments/layout :: adminTopbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <div>
+          <p class="eyebrow">Infraestructura</p>
+          <h1>Edificios</h1>
+          <p class="subtitle">Edificios del centro. Cada edificio contiene plantas y estas, aulas.</p>
         </div>
-        <div class="card-actions">
-          <a th:href="@{'/edificios/editar/' + ${edificio.id}}" class="btn-edit">✏️ Editar</a>
-          <!-- Enlace para borrar el edificio -->
-          <form th:action="@{'/edificios/borrar/' + ${edificio.id}}" method="post" style="display:inline;margin:0"
-                onsubmit="return confirm('¿Estás seguro de borrar este edificio?');">
-            <button type="submit" class="btn-delete">🗑️ Borrar</button>
-          </form>
+        <a class="btn btn-primary" th:href="@{/edificios/nuevo}"><svg class="icon"><use href="#i-plus"/></svg>Nuevo edificio</a>
+      </div>
+      <div th:replace="fragments/layout :: flash"></div>
+
+      <div class="card">
+        <div class="empty" th:if="${#lists.isEmpty(edificios)}">
+          <span class="empty-icon"><svg class="icon"><use href="#i-building"/></svg></span>
+          <h3>No hay edificios</h3>
+          <p>Crea el primer edificio para empezar a dar de alta plantas y aulas.</p>
+          <a class="btn btn-primary" th:href="@{/edificios/nuevo}"><svg class="icon"><use href="#i-plus"/></svg>Nuevo edificio</a>
+        </div>
+        <div class="table-wrap" th:unless="${#lists.isEmpty(edificios)}">
+          <table class="table">
+            <thead><tr><th>Edificio</th><th>Ubicación</th><th class="num">Aulas</th><th class="num">Accesos</th><th>Estado</th><th><span class="sr-only">Acciones</span></th></tr></thead>
+            <tbody>
+              <tr th:each="edificio : ${edificios}">
+                <td><div class="cell-title" th:text="${edificio.descripcion}">Edificio</div><div class="id" th:text="'#' + ${edificio.id}">#1</div></td>
+                <td th:text="${edificio.ubicacion} ?: '—'">Ubicación</td>
+                <td class="num" th:text="${edificio.naulas} ?: '—'">0</td>
+                <td class="num" th:text="${edificio.npuertasacceso} ?: '—'">0</td>
+                <td><span th:replace="fragments/layout :: estado(${edificio.activo})"></span></td>
+                <td class="actions">
+                  <a class="btn btn-ghost btn-sm btn-icon" th:href="@{'/edificios/editar/' + ${edificio.id}}" title="Editar" aria-label="Editar"><svg class="icon"><use href="#i-edit"/></svg></a>
+                  <form th:action="@{'/edificios/borrar/' + ${edificio.id}}" method="post" data-confirm="¿Borrar este edificio? También se borrarán sus plantas.">
+                    <button type="submit" class="btn btn-ghost btn-sm btn-icon btn-icon-danger" title="Borrar" aria-label="Borrar"><svg class="icon"><use href="#i-trash"/></svg></button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <!-- Fin de tarjeta -->
-    </div>
-
-    <!-- Contenedor de botones globales -->
-    <div class="btn-container">
-      <a th:href="@{/edificios/nuevo}" class="btn">➕ Crear Nuevo Edificio</a>
-      <a th:href="@{/menu}" class="btn-secondary">🏠 Volver al Menú</a>
-    </div>
-
-    <!-- (Opcional) Modal de confirmación si prefieres usar JavaScript avanzado -->
-    <div class="modal" id="confirm-modal" style="display: none;">
-      <div class="modal-content">
-        <p>⚠️ ¿Estás seguro de borrar este edificio?</p>
-        <button class="confirm">Sí, eliminar</button>
-        <button class="cancel">Cancelar</button>
-      </div>
-    </div>
-  </body>
+    </main>
+  </div>
+</div>
+</body>
 </html>

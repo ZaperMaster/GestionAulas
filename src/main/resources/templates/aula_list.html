@@ -1,80 +1,66 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aulas 🏫</title>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Enlace al CSS -->
-    <link rel="stylesheet" th:href="@{/css/aulas_list.css}" />
-  </head>
-  <body>
-    <header>
-      <h1>Lista de Aulas 🏫</h1>
-    </header>
-
-    <!-- Contenedor de tarjetas -->
-    <div class="card-container">
-      <!-- Se genera una tarjeta por cada aula -->
-      <div class="card" th:each="a : ${aulas}">
-        <div class="card-content">
-          <h2 th:text="${a.nombreaula}">Nombre del Aula</h2>
-          <p>
-            <strong>ID:</strong>
-            <span th:text="${a.id}">1</span>
-          </p>
-          <p>
-            <strong>Descripción:</strong>
-            <span th:text="${a.descripcion}">Descripción del Aula</span>
-          </p>
-          <p>
-            <strong>Capacidad:</strong>
-            <span th:text="${a.capacidad}">30</span>
-          </p>
-          <p>
-            <strong>Planta:</strong>
-            <span th:text="${a.planta != null ? a.planta.descripcion : 'Sin Planta'}">Sin Planta</span>
-          </p>
-          <p>
-            <strong>Edificio:</strong>
-            <span th:text="${a.planta != null ? a.planta.edificio.descripcion : 'Sin Edificio'}">Sin Edificio</span>
-          </p>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Aulas')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<div class="shell">
+  <aside th:replace="fragments/layout :: adminNav('aulas')"></aside>
+  <div>
+    <header th:replace="fragments/layout :: adminTopbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <div>
+          <p class="eyebrow">Infraestructura</p>
+          <h1>Aulas</h1>
+          <p class="subtitle">Aulas que se pueden reservar, con su ubicación, capacidad y equipamiento.</p>
         </div>
-        <div class="card-actions">
-          <a th:href="@{'/aulas/editar/' + ${a.id}}" class="btn-edit">📝 Editar</a>
-          <!-- Botón para borrar: se usa data-id para almacenar el id del aula -->
-          <form th:action="@{'/aulas/borrar/' + ${a.id}}" method="post" style="display:inline;margin:0"
-                onsubmit="return confirm('¿Está seguro de borrar este Aula?');">
-            <button type="submit" class="btn-delete">🗑️ Borrar</button>
-          </form>
+        <a class="btn btn-primary" th:href="@{/aulas/nuevo}"><svg class="icon"><use href="#i-plus"/></svg>Nueva aula</a>
+      </div>
+      <div th:replace="fragments/layout :: flash"></div>
+
+      <div class="card">
+        <div class="empty" th:if="${#lists.isEmpty(aulas)}">
+          <span class="empty-icon"><svg class="icon"><use href="#i-door"/></svg></span>
+          <h3>No hay aulas</h3>
+          <p>Crea un aula dentro de una planta para que se pueda reservar.</p>
+          <a class="btn btn-primary" th:href="@{/aulas/nuevo}"><svg class="icon"><use href="#i-plus"/></svg>Nueva aula</a>
+        </div>
+        <div class="table-wrap" th:unless="${#lists.isEmpty(aulas)}">
+          <table class="table">
+            <thead><tr><th>Aula</th><th>Ubicación</th><th>Tipo</th><th class="num">Plazas</th><th>Equipamiento</th><th>Estado</th><th><span class="sr-only">Acciones</span></th></tr></thead>
+            <tbody>
+              <tr th:each="a : ${aulas}">
+                <td><div class="cell-title" th:text="${a.nombreaula}">A-101</div><div class="cell-sub" th:text="${a.descripcion}">Descripción</div></td>
+                <td>
+                  <div th:text="${a.planta != null ? a.planta.edificio.descripcion : '—'}">Edificio</div>
+                  <div class="cell-sub" th:text="${a.planta != null ? a.planta.descripcion : ''}">Planta</div>
+                </td>
+                <td th:text="${a.tipoAula != null ? a.tipoAula.nombretipo : '—'}">Tipo</td>
+                <td class="num" th:text="${a.capacidad} ?: '—'">30</td>
+                <td>
+                  <div class="equip">
+                    <span class="badge badge-plain" th:if="${a.proyector}">Proyector</span>
+                    <span class="badge badge-plain" th:if="${a.smarttv}">Smart TV</span>
+                    <span class="badge badge-plain" th:if="${a.hdmi}">HDMI</span>
+                    <span class="badge badge-plain" th:if="${a.appletv}">Apple TV</span>
+                    <span class="badge badge-plain" th:if="${a.aireacondicionado}">A/A</span>
+                    <span class="muted" th:unless="${a.proyector or a.smarttv or a.hdmi or a.appletv or a.aireacondicionado}">—</span>
+                  </div>
+                </td>
+                <td><span th:replace="fragments/layout :: estado(${a.activo == null or a.activo})"></span></td>
+                <td class="actions">
+                  <a class="btn btn-ghost btn-sm btn-icon" th:href="@{'/aulas/editar/' + ${a.id}}" title="Editar" aria-label="Editar"><svg class="icon"><use href="#i-edit"/></svg></a>
+                  <form th:action="@{'/aulas/borrar/' + ${a.id}}" method="post" data-confirm="¿Borrar esta aula?">
+                    <button type="submit" class="btn btn-ghost btn-sm btn-icon btn-icon-danger" title="Borrar" aria-label="Borrar"><svg class="icon"><use href="#i-trash"/></svg></button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <!-- Fin de la tarjeta -->
-    </div>
-
-    <!-- Contenedor de botones inferiores -->
-    <div class="btn-container">
-      <a th:href="@{/aulas/nuevo}" class="btn">➕ Crear Nueva Aula</a>
-      <a th:href="@{/menu}" class="btn">↩️ Volver al Menú</a>
-    </div>
-
-    <!-- (Opcional) Modal de confirmación si prefieres usarlo en lugar de confirm() -->
-    <!-- Puedes quitar este bloque si no lo usas -->
-    <div class="modal" id="confirm-modal" style="display:none;">
-      <div class="modal-content">
-        <p>⚠️ ¿Está seguro de borrar este Aula?</p>
-        <button class="confirm">Sí, eliminar</button>
-        <button class="cancel">Cancelar</button>
-      </div>
-    </div>
-
-  </body>
+    </main>
+  </div>
+</div>
+</body>
 </html>

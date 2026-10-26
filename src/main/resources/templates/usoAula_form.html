@@ -1,75 +1,42 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title
-      th:text="${usoAula.id} != null ? 'Editar Uso de Aula 🏫✏️' : 'Crear Nuevo Uso de Aula 🏫✨'"
-    >
-      Formulario Uso de Aula
-    </title>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head(${usoAula.id != null} ? 'Editar uso de aula' : 'Nuevo uso de aula')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<div class="shell">
+  <aside th:replace="fragments/layout :: adminNav('usoAulas')"></aside>
+  <div>
+    <header th:replace="fragments/layout :: adminTopbar"></header>
+    <main class="content">
+      <a class="back-link" th:href="@{/usoAulas}"><svg class="icon"><use href="#i-arrow-left"/></svg>Usos de aula</a>
+      <div class="page-header">
+        <div>
+          <h1 th:text="${usoAula.id != null} ? 'Editar uso de aula' : 'Nuevo uso de aula'">Nuevo uso de aula</h1>
+          <p class="subtitle">Para qué se usan las aulas. Cada uso se divide en subusos.</p>
+        </div>
+      </div>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Estilos de la plantilla -->
-    <link rel="stylesheet" th:href="@{/css/usoAula_form.css}" />
-
-  </head>
-  <body>
-    <div class="container">
-      <h2
-        th:text="${usoAula.id} != null ? 'Editar Uso de Aula 🏫✏️' : 'Crear Nuevo Uso de Aula 🏫✨'"
-      >
-        Formulario de Uso de Aula 🏫
-      </h2>
-
-      <form
-        th:action="@{/usoAulas}"
-        th:object="${usoAula}"
-        method="post"
-        id="usoAulaForm"
-        novalidate
-      >
+      <form class="card form-card" th:action="@{/usoAulas}" th:object="${usoAula}" method="post">
         <input type="hidden" th:field="*{id}" />
-
-        <div class="form-container">
-          <div class="form-group">
-            <label for="descripcion">📝 Descripción:</label>
-            <input
-              type="text"
-              id="descripcion"
-              th:field="*{descripcion}"
-              placeholder="Ej: Uso de Aula 101 🏫"
-              required
-            />
-            <span class="error-message"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="activo">✅ Estado:</label>
-            <select id="activo" th:field="*{activo}" required>
-              <option value="" disabled selected>
-                Seleccione una opción 🔽
-              </option>
-              <option value="true">Activo 👍</option>
-              <option value="false">Inactivo 👎</option>
-            </select>
-            <span class="error-message"></span>
+        <div class="card-body">
+          <div class="alert alert-error" th:if="${#fields.hasAnyErrors()}" role="alert"><svg class="icon"><use href="#i-alert"/></svg><span>Revisa los datos del formulario.</span></div>
+          <div class="form-grid">
+            <div class="field full">
+              <label for="descripcion">Nombre</label>
+              <input type="text" id="descripcion" th:field="*{descripcion}" placeholder="Ej: Docencia" required />
+            </div>
+            <div class="field full">
+              <label th:replace="fragments/layout :: switchActivo(${usoAula.id == null}, ${usoAula.activo})"></label>
+            </div>
           </div>
         </div>
-
         <div class="form-actions">
-          <button type="submit">💾 Guardar</button>
-          <a th:href="@{/usoAulas}" class="cancel-button">❌ Cancelar</a>
+          <a class="btn btn-ghost" th:href="@{/usoAulas}">Cancelar</a>
+          <button type="submit" class="btn btn-primary"><svg class="icon"><use href="#i-check"/></svg>Guardar</button>
         </div>
       </form>
-    </div>
-    <script src="js/usoAula_form.js"></script>
-  </body>
+    </main>
+  </div>
+</div>
+</body>
 </html>

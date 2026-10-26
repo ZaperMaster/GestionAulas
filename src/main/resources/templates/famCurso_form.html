@@ -1,89 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title
-      th:text="${famCurso.id} != null ? 'Editar FamCurso' : 'Crear Nuevo FamCurso'"
-    >
-      Formulario FamCurso
-    </title>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head(${famCurso.id != null} ? 'Editar familia de cursos' : 'Nueva familia')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<div class="shell">
+  <aside th:replace="fragments/layout :: adminNav('famCursos')"></aside>
+  <div>
+    <header th:replace="fragments/layout :: adminTopbar"></header>
+    <main class="content">
+      <a class="back-link" th:href="@{/famCursos}"><svg class="icon"><use href="#i-arrow-left"/></svg>Familias de cursos</a>
+      <div class="page-header">
+        <div>
+          <h1 th:text="${famCurso.id != null} ? 'Editar familia de cursos' : 'Nueva familia'">Nueva familia</h1>
+          <p class="subtitle">Familias profesionales o áreas que agrupan los cursos.</p>
+        </div>
+      </div>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Estilos Mejorados -->
-    <link rel="stylesheet" th:href="@{/css/famCurso_form.css}" />
-
-  </head>
-  <body>
-    <div class="container">
-      <h2
-        th:text="${famCurso.id} != null ? 'Editar FamCurso' : 'Crear Nuevo FamCurso'"
-      >
-        Formulario FamCurso
-      </h2>
-
-      <form
-        th:action="@{/famCursos}"
-        th:object="${famCurso}"
-        method="post"
-        id="famCursoForm"
-        novalidate
-      >
+      <form class="card form-card" th:action="@{/famCursos}" th:object="${famCurso}" method="post">
         <input type="hidden" th:field="*{id}" />
-
-        <div class="form-container">
-          <div class="form-group">
-            <label for="descripcion">📌 Descripción:</label>
-            <input
-              type="text"
-              id="descripcion"
-              th:field="*{descripcion}"
-              placeholder="Ej: Ciencias Sociales"
-              required
-            />
-            <span class="error-message"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="activo">✅ Activo:</label>
-            <select id="activo" th:field="*{activo}" required>
-              <option value="" disabled selected>Seleccione una opción</option>
-              <option value="true">Sí</option>
-              <option value="false">No</option>
-            </select>
-            <span class="error-message"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="subUsoAulaSelect">📚 SubUsoAula:</label>
-            <select id="subUsoAulaSelect" th:field="*{subUsoAula}" required>
-              <option value="" disabled selected>
-                Seleccione un SubUsoAula
-              </option>
-              <option
-                th:each="sub : ${subUsoAulas}"
-                th:value="${sub.id}"
-                th:text="${sub.descripcion}"
-              ></option>
-            </select>
-            <span class="error-message"></span>
+        <div class="card-body">
+          <div class="alert alert-error" th:if="${#fields.hasAnyErrors()}" role="alert"><svg class="icon"><use href="#i-alert"/></svg><span>Revisa los datos del formulario.</span></div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="descripcion">Nombre</label>
+              <input type="text" id="descripcion" th:field="*{descripcion}" placeholder="Ej: Informática y comunicaciones" required />
+            </div>
+            <div class="field">
+              <label for="subUsoAula">Subuso de aula</label>
+              <select id="subUsoAula" name="subUsoAula" required>
+                <option value="" disabled th:selected="${famCurso.subUsoAula == null}">Selecciona una opción</option>
+                <option th:each="sub : ${subUsoAulas}" th:value="${sub.id}" th:text="${sub.descripcion}"
+                        th:selected="${famCurso.subUsoAula != null and famCurso.subUsoAula.id == sub.id}">Opción</option>
+              </select>
+              <span class="hint" th:if="${#lists.isEmpty(subUsoAulas)}">Primero tienes que <a th:href="@{/subUsoAulas/nuevo}">crear un subuso de aula</a>.</span>
+            </div>
+            <div class="field full">
+              <label th:replace="fragments/layout :: switchActivo(${famCurso.id == null}, ${famCurso.activo})"></label>
+            </div>
           </div>
         </div>
-
         <div class="form-actions">
-          <button type="submit">💾 Guardar</button>
-          <a th:href="@{/famCursos}" class="cancel-button">❌ Cancelar</a>
+          <a class="btn btn-ghost" th:href="@{/famCursos}">Cancelar</a>
+          <button type="submit" class="btn btn-primary"><svg class="icon"><use href="#i-check"/></svg>Guardar</button>
         </div>
       </form>
-    </div>
-
-    <script src="js/famCurso_form.js"></script>
-  </body>
+    </main>
+  </div>
+</div>
+</body>
 </html>

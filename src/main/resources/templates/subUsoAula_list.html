@@ -1,62 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sub Uso Aulas 📋</title>
-
-    <!-- Google Fonts: Puedes usar la misma fuente que en tus otros archivos -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Enlace al CSS -->
-    <link rel="stylesheet" href="css/subUsoAula_list.css" />
-  </head>
-  <body>
-    <header>
-      <h1>Listado de Sub Uso Aulas 📋</h1>
-    </header>
-
-    <!-- Contenedor de tarjetas -->
-    <div class="card-container">
-      <!-- Se genera una tarjeta por cada Sub Uso Aula -->
-      <div class="card" th:each="subUso : ${subUsoAulas}">
-        <div class="card-content">
-          <h2 th:text="${subUso.descripcion}">Descripción</h2>
-          <p>
-            <strong>ID:</strong>
-            <span th:text="${subUso.id}">1</span>
-          </p>
-          <p>
-            <strong>Activo:</strong>
-            <span th:text="${subUso.activo} ? '✅ Activo' : '❌ Inactivo'">Estado</span>
-          </p>
-          <p>
-            <strong>Uso Aula:</strong>
-            <span th:text="${subUso.usoAula != null ? subUso.usoAula.descripcion : 'Sin UsoAula'}">
-              Sin UsoAula
-            </span>
-          </p>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Subusos de aula')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<div class="shell">
+  <aside th:replace="fragments/layout :: adminNav('subUsoAulas')"></aside>
+  <div>
+    <header th:replace="fragments/layout :: adminTopbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <div>
+          <p class="eyebrow">Formación</p>
+          <h1>Subusos de aula</h1>
+          <p class="subtitle">Detalle de cada uso de aula. Agrupan las familias de cursos.</p>
         </div>
-        <div class="card-actions">
-          <a th:href="@{'/subUsoAulas/editar/' + ${subUso.id}}" class="btn-edit">✏️ Editar</a>
-          <form th:action="@{'/subUsoAulas/borrar/' + ${subUso.id}}" method="post" style="display:inline;margin:0"
-                onsubmit="return confirm('¿Está seguro de borrar este Sub Uso Aula?');">
-            <button type="submit" class="btn-delete">🗑️ Borrar</button>
-          </form>
+        <a class="btn btn-primary" th:href="@{/subUsoAulas/nuevo}"><svg class="icon"><use href="#i-plus"/></svg>Nuevo subuso de aula</a>
+      </div>
+      <div th:replace="fragments/layout :: flash"></div>
+
+      <div class="card">
+        <div class="empty" th:if="${#lists.isEmpty(subUsoAulas)}">
+          <span class="empty-icon"><svg class="icon"><use href="#i-list"/></svg></span>
+          <h3>Todavía no hay subusos de aula</h3>
+          <p>Crea el primero con el botón de arriba.</p>
+          <a class="btn btn-primary" th:href="@{/subUsoAulas/nuevo}"><svg class="icon"><use href="#i-plus"/></svg>Nuevo subuso de aula</a>
+        </div>
+        <div class="table-wrap" th:unless="${#lists.isEmpty(subUsoAulas)}">
+          <table class="table">
+            <thead><tr><th>Nombre</th><th>Uso de aula</th><th>Estado</th><th><span class="sr-only">Acciones</span></th></tr></thead>
+            <tbody>
+              <tr th:each="subUso : ${subUsoAulas}">
+                <td><div class="cell-title" th:text="${subUso.descripcion}">Nombre</div><div class="id" th:text="'#' + ${subUso.id}">#1</div></td>
+                <td th:text="${subUso.usoAula != null ? subUso.usoAula.descripcion : '—'}">Uso de aula</td>
+                <td><span th:replace="fragments/layout :: estado(${subUso.activo})"></span></td>
+                <td class="actions">
+                  <a class="btn btn-ghost btn-sm btn-icon" th:href="@{'/subUsoAulas/editar/' + ${subUso.id}}" title="Editar" aria-label="Editar"><svg class="icon"><use href="#i-edit"/></svg></a>
+                  <form th:action="@{'/subUsoAulas/borrar/' + ${subUso.id}}" method="post" data-confirm="¿Borrar este subuso de aula?">
+                    <button type="submit" class="btn btn-ghost btn-sm btn-icon btn-icon-danger" title="Borrar" aria-label="Borrar"><svg class="icon"><use href="#i-trash"/></svg></button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <!-- Fin de la tarjeta -->
-    </div>
-
-    <!-- Contenedor de botones globales -->
-    <div class="btn-container">
-      <a th:href="@{/subUsoAulas/nuevo}" class="btn">➕ Crear Nuevo Sub Uso Aula</a>
-      <a th:href="@{/menu}" class="btn-secondary">🏠 Volver al Menú</a>
-    </div>
-  </body>
+    </main>
+  </div>
+</div>
+</body>
 </html>

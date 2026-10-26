@@ -1,106 +1,59 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title th:text="${planta.id} != null ? 'Editar Planta' : 'Crear Nueva Planta'">
-      Formulario Planta
-    </title>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head(${planta.id != null} ? 'Editar planta' : 'Nueva planta')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<div class="shell">
+  <aside th:replace="fragments/layout :: adminNav('plantas')"></aside>
+  <div>
+    <header th:replace="fragments/layout :: adminTopbar"></header>
+    <main class="content">
+      <a class="back-link" th:href="@{/plantas}"><svg class="icon"><use href="#i-arrow-left"/></svg>Plantas</a>
+      <div class="page-header">
+        <div>
+          <h1 th:text="${planta.id != null} ? 'Editar planta' : 'Nueva planta'">Nueva planta</h1>
+          <p class="subtitle">Indica a qué edificio pertenece y cuántas aulas tiene.</p>
+        </div>
+      </div>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Enlace al CSS; asegúrate de que la ruta sea correcta -->
-    <link rel="stylesheet" th:href="@{/css/planta_form.css}" />
-  </head>
-  <body>
-    <div class="container">
-      <h2 th:text="${planta.id} != null ? 'Editar Planta' : 'Crear Nueva Planta'">
-        Formulario de Planta
-      </h2>
-
-      <form
-        th:action="@{/plantas}"
-        th:object="${planta}"
-        method="post"
-        id="plantaForm"
-        novalidate
-      >
+      <form class="card form-card" th:action="@{/plantas}" th:object="${planta}" method="post">
         <input type="hidden" th:field="*{id}" />
-
-        <div class="form-container">
-          <div class="form-group">
-            <label for="descripcion">📌 Descripción:</label>
-            <input
-              type="text"
-              id="descripcion"
-              th:field="*{descripcion}"
-              placeholder="Ej: Primera Planta"
-              required
-            />
-            <span class="error-message"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="naulasdocentes">🏫 Aulas Docentes:</label>
-            <input
-              type="number"
-              id="naulasdocentes"
-              th:field="*{naulasdocentes}"
-              placeholder="Ej: 10"
-              min="0"
-            />
-            <span class="error-message"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="naulaauxiliares">📐 Aulas Auxiliares:</label>
-            <input
-              type="number"
-              id="naulaauxiliares"
-              th:field="*{naulaauxiliares}"
-              placeholder="Ej: 5"
-              min="0"
-            />
-            <span class="error-message"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="activo">✅ Estado:</label>
-            <select id="activo" th:field="*{activo}" required>
-              <option value="" disabled selected>Seleccione una opción</option>
-              <option value="true">Activo</option>
-              <option value="false">Inactivo</option>
-            </select>
-            <span class="error-message"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="edificioSelect">🏢 Edificio:</label>
-            <select id="edificioSelect" th:field="*{edificio}" required>
-              <option value="" disabled selected>Seleccione un edificio</option>
-              <option
-                th:each="ed : ${edificios}"
-                th:value="${ed.id}"
-                th:text="${ed.descripcion}"
-              ></option>
-            </select>
-            <span class="error-message"></span>
+        <div class="card-body">
+          <div class="alert alert-error" th:if="${#fields.hasAnyErrors()}" role="alert"><svg class="icon"><use href="#i-alert"/></svg><span>Revisa los datos del formulario.</span></div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="descripcion">Nombre</label>
+              <input type="text" id="descripcion" th:field="*{descripcion}" placeholder="Ej: Planta baja" required />
+            </div>
+            <div class="field">
+              <label for="edificio">Edificio</label>
+              <select id="edificio" name="edificio" required>
+                <option value="" disabled th:selected="${planta.edificio == null}">Selecciona un edificio</option>
+                <option th:each="ed : ${edificios}" th:value="${ed.id}" th:text="${ed.descripcion}"
+                        th:selected="${planta.edificio != null and planta.edificio.id == ed.id}">Edificio</option>
+              </select>
+              <span class="hint" th:if="${#lists.isEmpty(edificios)}">Primero tienes que <a th:href="@{/edificios/nuevo}">crear un edificio</a>.</span>
+            </div>
+            <div class="field">
+              <label for="naulasdocentes">Aulas docentes</label>
+              <input type="number" id="naulasdocentes" th:field="*{naulasdocentes}" placeholder="Ej: 8" min="0" />
+            </div>
+            <div class="field">
+              <label for="naulaauxiliares">Aulas auxiliares</label>
+              <input type="number" id="naulaauxiliares" th:field="*{naulaauxiliares}" placeholder="Ej: 2" min="0" />
+            </div>
+            <div class="field full">
+              <label th:replace="fragments/layout :: switchActivo(${planta.id == null}, ${planta.activo})"></label>
+            </div>
           </div>
         </div>
-
         <div class="form-actions">
-          <button type="submit">💾 Guardar</button>
-          <a th:href="@{/plantas}" class="cancel-button">❌ Cancelar</a>
+          <a class="btn btn-ghost" th:href="@{/plantas}">Cancelar</a>
+          <button type="submit" class="btn btn-primary"><svg class="icon"><use href="#i-check"/></svg>Guardar</button>
         </div>
       </form>
-    </div>
-
-    <script src="js/planta_form.js"></script>
-  </body>
+    </main>
+  </div>
+</div>
+</body>
 </html>

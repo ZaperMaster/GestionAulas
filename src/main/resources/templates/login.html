@@ -1,39 +1,54 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Iniciar Sesión</title>
-  <!-- Google Fonts para tipografía moderna -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <!-- Enlace al archivo CSS -->
-  <link rel="stylesheet" href="css/login.css">
-</head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Iniciar sesión')"></head>
 <body>
-  <div class="container">
-    <div class="login-form">
-      <h2>Iniciar Sesión</h2>
-      <form th:action="@{/login}" method="post" id="loginForm" novalidate>
-        <!-- Email (campo username para Spring Security) -->
-        <label for="username">Email:</label>
-        <input type="email" id="username" name="username" placeholder="tu@correo.com" required aria-required="true" aria-describedby="usernameError" />
-        <span class="error-message" id="usernameError" aria-live="assertive"></span>
-        
-        <!-- Contraseña -->
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" placeholder="********" required aria-required="true" aria-describedby="passwordError" />
-        <span class="error-message" id="passwordError" aria-live="assertive"></span>
-        
-        <button type="submit">Ingresar</button>
-      </form>
-      <div class="register-link">
-        <p>¿No tienes cuenta? <a th:href="@{/registro}">Regístrate aquí</a></p>
+<svg th:replace="fragments/layout :: icons"></svg>
+<div class="auth">
+  <aside class="auth-aside">
+    <span class="brand"><span class="brand-mark"><svg class="icon"><use href="#i-door"/></svg></span><span>Gestion<b>Aulas</b></span></span>
+    <div>
+      <h2>Reserva el aula que necesitas en unos segundos.</h2>
+      <p>Consulta los edificios, plantas y aulas del centro y gestiona tus reservas desde un único sitio.</p>
+      <div class="auth-points">
+        <span><svg class="icon"><use href="#i-building"/></svg>Edificios, plantas y aulas organizados</span>
+        <span><svg class="icon"><use href="#i-calendar"/></svg>Reservas por fecha y horario</span>
+        <span><svg class="icon"><use href="#i-check"/></svg>Validación por parte de administración</span>
       </div>
     </div>
-  </div>
-  <!-- Enlace al archivo JavaScript -->
-  <script src="js/login.js"></script>
+    <small>GestionAulas</small>
+  </aside>
+
+  <main class="auth-main">
+    <div class="auth-box">
+      <span class="brand auth-mobile-brand"><span class="brand-mark"><svg class="icon"><use href="#i-door"/></svg></span><span>Gestion<b>Aulas</b></span></span>
+      <h1>Iniciar sesión</h1>
+      <p class="subtitle">Entra con tu email y tu contraseña.</p>
+
+      <div class="alert alert-error" th:if="${param.error}" role="alert">
+        <svg class="icon"><use href="#i-alert"/></svg><span>Email o contraseña incorrectos.</span>
+      </div>
+      <div class="alert alert-success" th:if="${param.logout}" role="status">
+        <svg class="icon"><use href="#i-check"/></svg><span>Has cerrado sesión.</span>
+      </div>
+      <div class="alert alert-success" th:if="${param.registrado}" role="status">
+        <svg class="icon"><use href="#i-check"/></svg><span>Cuenta creada. Ya puedes iniciar sesión.</span>
+      </div>
+
+      <form th:action="@{/login}" method="post">
+        <div class="field">
+          <label for="username">Email</label>
+          <input type="email" id="username" name="username" placeholder="tu@correo.com" autocomplete="username" required autofocus />
+        </div>
+        <div class="field">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" name="password" placeholder="Tu contraseña" autocomplete="current-password" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+      </form>
+
+      <p class="auth-foot">¿No tienes cuenta? <a th:href="@{/registro}">Regístrate</a></p>
+    </div>
+  </main>
+</div>
 </body>
 </html>
