@@ -1,64 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Plantas de [[${edificio.descripcion}]] 🏢</title>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Plantas')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<header th:replace="fragments/layout :: userNav('edificios')"></header>
+<main class="page">
+  <nav class="breadcrumb" aria-label="Ruta">
+    <a th:href="@{/menuUsuario}">Edificios</a>
+    <svg class="icon"><use href="#i-chevron"/></svg>
+    <span aria-current="page" th:text="${edificio.descripcion}">Edificio</span>
+  </nav>
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Paso 2 de 3</p>
+      <h1>Elige una planta</h1>
+      <p class="subtitle">Plantas de <b th:text="${edificio.descripcion}">Edificio</b><span th:if="${edificio.ubicacion}" th:text="' · ' + ${edificio.ubicacion}"></span></p>
+    </div>
+  </div>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+  <div class="card empty" th:if="${#lists.isEmpty(plantas)}">
+    <span class="empty-icon"><svg class="icon"><use href="#i-layers"/></svg></span>
+    <h3>Este edificio no tiene plantas</h3>
+    <p>Prueba con otro edificio.</p>
+    <a class="btn btn-secondary" th:href="@{/menuUsuario}"><svg class="icon"><use href="#i-arrow-left"/></svg>Volver a edificios</a>
+  </div>
 
-    <!-- Enlace al CSS -->
-    <link
-      rel="stylesheet"
-      th:href="@{/css/plantasUsuario.css}"
-      href="css/plantasUsuario.css"
-    />
-  </head>
-  <body>
-    <header>
-      <h1>
-        Plantas de <span th:text="${edificio.descripcion}">Edificio</span> 🏢
-      </h1>
-    </header>
-
-    <!-- Contenedor de tarjetas -->
-    <div class="card-container">
-      <div th:if="${#lists.isEmpty(plantas)}">
-        <p>No hay plantas disponibles para este edificio.</p>
-      </div>
-
-      <!-- Se genera una tarjeta por cada planta -->
-      <div class="card" th:each="pl : ${plantas}">
-        <div class="card-content">
-          <h2 th:text="${pl.descripcion}">Descripción de la Planta</h2>
-          <p>
-            <strong>Aulas Docentes:</strong>
-            <span th:text="${pl.naulasdocentes}">0</span>
-          </p>
-          <p>
-            <strong>Aulas Auxiliares:</strong>
-            <span th:text="${pl.naulaauxiliares}">0</span>
-          </p>
-        </div>
-        <div class="card-actions">
-          <a
-            th:href="@{'/menuUsuario/planta/' + ${pl.id} + '/aulas'}"
-            class="btn"
-            >🏫 Ver Aulas</a
-          >
+  <div class="grid-cards" th:unless="${#lists.isEmpty(plantas)}">
+    <a class="card place-card" th:each="pl : ${plantas}" th:href="@{'/menuUsuario/planta/' + ${pl.id} + '/aulas'}" style="color: inherit; text-decoration: none">
+      <div class="place-cover alt"><svg class="icon"><use href="#i-layers"/></svg></div>
+      <div class="place-body">
+        <h3 th:text="${pl.descripcion}">Planta</h3>
+        <div class="meta">
+          <span th:if="${pl.naulasdocentes != null}"><svg class="icon"><use href="#i-door"/></svg><span th:text="${pl.naulasdocentes} + ' aulas docentes'">0</span></span>
+          <span th:if="${pl.naulaauxiliares != null}"><svg class="icon"><use href="#i-grid"/></svg><span th:text="${pl.naulaauxiliares} + ' auxiliares'">0</span></span>
         </div>
       </div>
-    </div>
-
-    <!-- Contenedor de botones inferiores -->
-    <div class="btn-container">
-      <a th:href="@{/menuUsuario}" class="btn volver-link">↩️ Volver</a>
-    </div>
-  </body>
+      <div class="place-foot"><span class="btn btn-ghost btn-sm">Ver aulas<svg class="icon"><use href="#i-arrow-right"/></svg></span></div>
+    </a>
+  </div>
+</main>
+</body>
 </html>

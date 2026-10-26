@@ -1,66 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestión de Usuarios</title>
-    <!-- Google Fonts: Montserrat -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Enlace al CSS -->
-    <link rel="stylesheet" href="css/usuario_list.css" />
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>Gestión de Usuarios</h1>
-      </header>
-
-      <section class="card-container">
-        <!-- Si no hay usuarios -->
-        <div th:if="${#lists.isEmpty(usuarios)}" class="no-data">
-          <p>No hay usuarios disponibles.</p>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Usuarios')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<div class="shell">
+  <aside th:replace="fragments/layout :: adminNav('usuarios')"></aside>
+  <div>
+    <header th:replace="fragments/layout :: adminTopbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <div>
+          <p class="eyebrow">Gestión</p>
+          <h1>Usuarios</h1>
+          <p class="subtitle">Personas registradas en la aplicación y su rol.</p>
         </div>
-        <!-- Tarjeta para cada usuario -->
-        <div class="card" th:each="usuario : ${usuarios}">
-          <div class="card-content">
-            <p><strong>ID:</strong> <span th:text="${usuario.id}">1</span></p>
-            <p>
-              <strong>Email:</strong>
-              <span th:text="${usuario.email}">email@ejemplo.com</span>
-            </p>
-            <p>
-              <strong>Nombre:</strong>
-              <span th:text="${usuario.nombre}">Nombre</span>
-            </p>
-            <p>
-              <strong>Apellido:</strong>
-              <span th:text="${usuario.apellido}">Apellido</span>
-            </p>
-            <p>
-              <strong>Tipo de Usuario:</strong>
-              <span th:text="${usuario.tipoUsuario.tipo}">Tipo</span>
-            </p>
-          </div>
-          <div class="card-actions">
-            <a
-              th:href="@{'/usuarios/editar/' + ${usuario.id}}"
-              class="btn-edit"
-            >
-              ✏️ Editar Tipo
-            </a>
-          </div>
-        </div>
-      </section>
+      </div>
+      <div th:replace="fragments/layout :: flash"></div>
 
-      <footer>
-        <a th:href="@{/menu}" class="btn btn-back">🏠 Volver al Menú</a>
-      </footer>
-    </div>
-    <script src="js/usuario_list.js"></script>
-  </body>
+      <div class="card">
+        <div class="empty" th:if="${#lists.isEmpty(usuarios)}">
+          <span class="empty-icon"><svg class="icon"><use href="#i-users"/></svg></span>
+          <h3>No hay usuarios</h3>
+          <p>Los usuarios aparecerán aquí cuando se registren.</p>
+        </div>
+        <div class="table-wrap" th:unless="${#lists.isEmpty(usuarios)}">
+          <table class="table">
+            <thead><tr><th>Usuario</th><th>Email</th><th>DNI</th><th>Teléfono</th><th>Rol</th><th><span class="sr-only">Acciones</span></th></tr></thead>
+            <tbody>
+              <tr th:each="usuario : ${usuarios}">
+                <td><div class="cell-title" th:text="${usuario.nombre} + ' ' + (${usuario.apellido} ?: '')">Nombre</div><div class="id" th:text="'#' + ${usuario.id}">#1</div></td>
+                <td th:text="${usuario.email}">email@correo.com</td>
+                <td th:text="${usuario.dni} ?: '—'">12345678A</td>
+                <td th:text="${usuario.telefono} ?: '—'">600000000</td>
+                <td>
+                  <span class="badge badge-primary" th:if="${usuario.tipoUsuario != null and usuario.tipoUsuario.id == 1}">Administrador</span>
+                  <span class="badge" th:unless="${usuario.tipoUsuario != null and usuario.tipoUsuario.id == 1}">Usuario</span>
+                </td>
+                <td class="actions">
+                  <a class="btn btn-ghost btn-sm" th:href="@{'/usuarios/editar/' + ${usuario.id}}"><svg class="icon"><use href="#i-edit"/></svg>Cambiar rol</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
 </html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="head(title)">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title th:text="${title} + ' · GestionAulas'">GestionAulas</title>
+  <link rel="icon" th:href="@{/img/favicon.svg}" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" th:href="@{/css/app.css}" />
+  <script th:src="@{/js/app.js}" defer></script>
+</head>
+<body>
+
+<!-- Iconos SVG reutilizables: <svg class="icon"><use href="#i-nombre"/></svg> -->
+<svg th:fragment="icons" xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></symbol>
+  <symbol id="i-building" viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M16 9h2a2 2 0 0 1 2 2v10M3 21h18M8 7h4M8 11h4M8 15h4"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5zM3 13l9 5 9-5"/></symbol>
+  <symbol id="i-door" viewBox="0 0 24 24"><path d="M5 21V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v17M3 21h18M15 12h.01"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9zM7.5 7.5h.01"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19V5a2 2 0 0 1 2-2h14v14H6a2 2 0 0 0-2 2 2 2 0 0 0 2 2h14"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM4 10h16M8 2v4M16 2v4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 20v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 20v-1a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-1a5 5 0 0 0-5-5H9a5 5 0 0 0-5 5v1M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM14 6l4 4"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4M10 17l5-5-5-5M15 12H3"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5M11 18l-6-6 6-6"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11zM12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></symbol>
+  <symbol id="i-projector" viewBox="0 0 24 24"><path d="M3 9h18v7H3zM16.5 12.5h.01M7 16l-1 3M17 16l1 3"/></symbol>
+  <symbol id="i-tv" viewBox="0 0 24 24"><path d="M3 6h18v11H3zM8 21h8"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 0 1-12 0zM12 18v4"/></symbol>
+  <symbol id="i-snow" viewBox="0 0 24 24"><path d="M12 2v20M4.9 4.9l14.2 14.2M2 12h20M4.9 19.1 19.1 4.9"/></symbol>
+  <symbol id="i-cable" viewBox="0 0 24 24"><path d="M7 3v4M11 3v4M5 7h8v4a4 4 0 0 1-8 0zM9 15v2a4 4 0 0 0 4 4h2a4 4 0 0 0 4-4V9"/></symbol>
+</svg>
+
+<!-- Navegación lateral del administrador -->
+<aside th:fragment="adminNav(active)" class="sidebar" id="sidebar">
+  <a class="brand" th:href="@{/menu}">
+    <span class="brand-mark"><svg class="icon"><use href="#i-door"/></svg></span>
+    <span>Gestion<b>Aulas</b></span>
+  </a>
+  <nav class="side-nav" aria-label="Administración">
+    <a th:href="@{/menu}" th:classappend="${active == 'menu'} ? 'active'"><svg class="icon"><use href="#i-home"/></svg>Panel</a>
+    <p class="side-label">Infraestructura</p>
+    <a th:href="@{/edificios}" th:classappend="${active == 'edificios'} ? 'active'"><svg class="icon"><use href="#i-building"/></svg>Edificios</a>
+    <a th:href="@{/plantas}" th:classappend="${active == 'plantas'} ? 'active'"><svg class="icon"><use href="#i-layers"/></svg>Plantas</a>
+    <a th:href="@{/aulas}" th:classappend="${active == 'aulas'} ? 'active'"><svg class="icon"><use href="#i-door"/></svg>Aulas</a>
+    <a th:href="@{/tipoaulas}" th:classappend="${active == 'tipoaulas'} ? 'active'"><svg class="icon"><use href="#i-tag"/></svg>Tipos de aula</a>
+    <p class="side-label">Formación</p>
+    <a th:href="@{/usoAulas}" th:classappend="${active == 'usoAulas'} ? 'active'"><svg class="icon"><use href="#i-grid"/></svg>Usos de aula</a>
+    <a th:href="@{/subUsoAulas}" th:classappend="${active == 'subUsoAulas'} ? 'active'"><svg class="icon"><use href="#i-list"/></svg>Subusos de aula</a>
+    <a th:href="@{/famCursos}" th:classappend="${active == 'famCursos'} ? 'active'"><svg class="icon"><use href="#i-folder"/></svg>Familias de cursos</a>
+    <a th:href="@{/cursos}" th:classappend="${active == 'cursos'} ? 'active'"><svg class="icon"><use href="#i-book"/></svg>Cursos</a>
+    <p class="side-label">Gestión</p>
+    <a th:href="@{/gestionarReservas}" th:classappend="${active == 'reservas'} ? 'active'"><svg class="icon"><use href="#i-calendar"/></svg>Reservas</a>
+    <a th:href="@{/usuarios}" th:classappend="${active == 'usuarios'} ? 'active'"><svg class="icon"><use href="#i-users"/></svg>Usuarios</a>
+    <a th:href="@{/menuUsuario}"><svg class="icon"><use href="#i-arrow-right"/></svg>Zona de reservas</a>
+  </nav>
+  <div class="side-footer">
+    <div class="who">
+      <span class="avatar"><svg class="icon"><use href="#i-user"/></svg></span>
+      <span class="who-text"><small>Administrador</small><span sec:authentication="name">admin</span></span>
+    </div>
+    <form th:action="@{/logout}" method="post">
+      <button type="submit" class="btn btn-ghost btn-block"><svg class="icon"><use href="#i-logout"/></svg>Cerrar sesión</button>
+    </form>
+  </div>
+</aside>
+
+<!-- Barra superior del panel en pantallas pequeñas -->
+<header th:fragment="adminTopbar" class="topbar-mobile">
+  <button type="button" class="btn btn-ghost btn-icon" data-toggle-sidebar aria-label="Abrir menú"><svg class="icon"><use href="#i-menu"/></svg></button>
+  <a class="brand" th:href="@{/menu}"><span class="brand-mark"><svg class="icon"><use href="#i-door"/></svg></span><span>Gestion<b>Aulas</b></span></a>
+</header>
+
+<!-- Barra superior de la zona de reservas -->
+<header th:fragment="userNav(active)" class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" th:href="@{/menuUsuario}">
+      <span class="brand-mark"><svg class="icon"><use href="#i-door"/></svg></span>
+      <span>Gestion<b>Aulas</b></span>
+    </a>
+    <nav class="top-nav" aria-label="Reservas">
+      <a th:href="@{/menuUsuario}" th:classappend="${active == 'edificios'} ? 'active'"><svg class="icon"><use href="#i-building"/></svg><span>Reservar aula</span></a>
+      <a th:href="@{/misreservas}" th:classappend="${active == 'misreservas'} ? 'active'"><svg class="icon"><use href="#i-calendar"/></svg><span>Mis reservas</span></a>
+      <a sec:authorize="hasRole('ADMIN')" th:href="@{/menu}"><svg class="icon"><use href="#i-grid"/></svg><span>Administración</span></a>
+    </nav>
+    <div class="top-user">
+      <span class="who-text" sec:authentication="name">usuario</span>
+      <form th:action="@{/logout}" method="post">
+        <button type="submit" class="btn btn-ghost btn-icon" title="Cerrar sesión" aria-label="Cerrar sesión"><svg class="icon"><use href="#i-logout"/></svg></button>
+      </form>
+    </div>
+  </div>
+</header>
+
+<!-- Mensajes de éxito o error enviados con RedirectAttributes -->
+<div th:fragment="flash" class="flash">
+  <div class="alert alert-success" th:if="${success}" role="status">
+    <svg class="icon"><use href="#i-check"/></svg><span th:text="${success}">Hecho</span>
+  </div>
+  <div class="alert alert-error" th:if="${error}" role="alert">
+    <svg class="icon"><use href="#i-alert"/></svg><span th:text="${error}">Error</span>
+  </div>
+</div>
+
+<!-- Estado activo / inactivo -->
+<span th:fragment="estado(valor)" class="badge" th:classappend="${valor} ? 'badge-success' : 'badge-muted'"
+      th:text="${valor} ? 'Activo' : 'Inactivo'">Activo</span>
+
+<!-- Interruptor activo/inactivo para formularios (nuevo = activo por defecto) -->
+<label th:fragment="switchActivo(nuevo, valor)" class="switch">
+  <input type="hidden" name="_activo" value="on" />
+  <input type="checkbox" name="activo" value="true" th:checked="${nuevo or valor == true}" />
+  <span class="switch-track"><span class="switch-thumb"></span></span>
+  <span>Activo</span>
+</label>
+
+</body>
+</html>

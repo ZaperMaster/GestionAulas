@@ -1,82 +1,88 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservar Aula</title>
-    <!-- Usamos th:href para que Thymeleaf resuelva la ruta correctamente -->
-    <link rel="stylesheet" th:href="@{/css/reserva_form.css}" href="css/reserva_form.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h2>Reservar Aula</h2>
-
-      <!-- Mensaje de error (opcional) -->
-      <div th:if="${error}">
-        <p class="error-message" th:text="${error}">Error</p>
-      </div>
-
-      <!-- Información del Aula (opcional) -->
-      <div th:if="${aula != null}">
-        <p><strong>Aula:</strong> <span th:text="${aula.nombreaula}">Aula X</span></p>
-        <p><strong>Capacidad:</strong> <span th:text="${aula.capacidad}">30</span></p>
-      </div>
-
-      <!-- Formulario de reserva vinculado al objeto Reserva -->
-      <form th:action="@{/reservas/procesar}" th:object="${reserva}" method="post" novalidate>
-        <!-- Campos ocultos para el ID del aula y del usuario (se asignan en el controlador) -->
-        <input type="hidden" th:field="*{aula.id}" />
-        <input type="hidden" th:field="*{usuario.id}" />
-
-        <div class="form-container">
-          <div class="form-group">
-            <label for="fechainicio">📅 Fecha Desde:</label>
-            <input type="date" id="fechainicio" th:field="*{fechainicio}" required />
-            <span class="error-message"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="fechafin">📅 Fecha Hasta:</label>
-            <input type="date" id="fechafin" th:field="*{fechafin}" required />
-            <span class="error-message"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="horainicio">⏰ Hora Desde:</label>
-            <input type="time" id="horainicio" th:field="*{horainicio}" required />
-            <span class="error-message"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="horafin">⏰ Hora Hasta:</label>
-            <input type="time" id="horafin" th:field="*{horafin}" required />
-            <span class="error-message"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="cursoId">📚 Curso:</label>
-            <select id="cursoId" name="cursoId" required>
-              <option value="" disabled selected>Seleccione un curso</option>
-              <option th:each="c : ${cursos}"
-                      th:value="${c.id}"
-                      th:text="${c.descripcion}">
-              </option>
-            </select>
-            <span class="error-message"></span>
-          </div>
-        </div>
-
-        <div class="form-actions">
-          <button type="submit">💾 Reservar</button>
-        </div>
-      </form>
-
-      <br />
-      <!-- Botón Volver: regresa a las aulas de la planta -->
-      <a th:href="@{'/menuUsuario/planta/' + ${aula.planta.id} + '/aulas'}" class="btn">❌ Volver</a>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Reservar ' + ${aula.nombreaula})"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<header th:replace="fragments/layout :: userNav('edificios')"></header>
+<main class="page">
+  <nav class="breadcrumb" aria-label="Ruta">
+    <a th:href="@{/menuUsuario}">Edificios</a>
+    <svg class="icon"><use href="#i-chevron"/></svg>
+    <a th:href="@{'/menuUsuario/edificio/' + ${aula.planta.edificio.id} + '/plantas'}" th:text="${aula.planta.edificio.descripcion}">Edificio</a>
+    <svg class="icon"><use href="#i-chevron"/></svg>
+    <a th:href="@{'/menuUsuario/planta/' + ${aula.planta.id} + '/aulas'}" th:text="${aula.planta.descripcion}">Planta</a>
+    <svg class="icon"><use href="#i-chevron"/></svg>
+    <span aria-current="page" th:text="${aula.nombreaula}">Aula</span>
+  </nav>
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Nueva reserva</p>
+      <h1 th:text="'Reservar ' + ${aula.nombreaula}">Reservar aula</h1>
+      <p class="subtitle">Indica las fechas, el horario y el curso. La administración validará la reserva.</p>
     </div>
+  </div>
 
-    <!-- Enlace al archivo JavaScript -->
-    <script th:src="@{/js/reserva_form.js}" src="js/reserva_form.js"></script>
-  </body>
+  <div class="alert alert-error" th:if="${error}" role="alert">
+    <svg class="icon"><use href="#i-alert"/></svg><span th:text="${error}">Error</span>
+  </div>
+
+  <div class="split">
+    <aside class="card summary">
+      <div class="place-cover alt2"><svg class="icon"><use href="#i-door"/></svg></div>
+      <div class="card-body">
+        <h2 style="font-size: 18px" th:text="${aula.nombreaula}">Aula</h2>
+        <p class="muted" th:if="${aula.descripcion}" th:text="${aula.descripcion}" style="font-size: 14px; margin-top: 2px">Descripción</p>
+        <dl class="details" style="margin-top: 18px">
+          <div><dt>Edificio</dt><dd th:text="${aula.planta.edificio.descripcion}">Edificio</dd></div>
+          <div><dt>Planta</dt><dd th:text="${aula.planta.descripcion}">Planta</dd></div>
+          <div th:if="${aula.capacidad != null}"><dt>Capacidad</dt><dd th:text="${aula.capacidad} + ' plazas'">30</dd></div>
+          <div th:if="${aula.tipoAula != null}"><dt>Tipo</dt><dd th:text="${aula.tipoAula.nombretipo}">Tipo</dd></div>
+        </dl>
+        <div class="equip" style="margin-top: 16px">
+          <span class="badge badge-primary badge-plain" th:if="${aula.proyector}">Proyector</span>
+          <span class="badge badge-primary badge-plain" th:if="${aula.smarttv}">Smart TV</span>
+          <span class="badge badge-primary badge-plain" th:if="${aula.hdmi}">HDMI</span>
+          <span class="badge badge-primary badge-plain" th:if="${aula.appletv}">Apple TV</span>
+          <span class="badge badge-primary badge-plain" th:if="${aula.aireacondicionado}">Aire acondicionado</span>
+        </div>
+      </div>
+    </aside>
+
+    <form class="card" id="reservaForm" th:action="@{/reservas/procesar}" th:object="${reserva}" method="post" novalidate>
+      <input type="hidden" th:field="*{aula.id}" />
+      <div class="card-body">
+        <div class="form-grid">
+          <div class="field full">
+            <label for="cursoId">Curso</label>
+            <select id="cursoId" name="cursoId" required>
+              <option value="" disabled selected>Selecciona un curso</option>
+              <option th:each="c : ${cursos}" th:value="${c.id}" th:text="${c.descripcion}">Curso</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="fechainicio">Desde el día</label>
+            <input type="date" id="fechainicio" th:field="*{fechainicio}" required />
+          </div>
+          <div class="field">
+            <label for="fechafin">Hasta el día</label>
+            <input type="date" id="fechafin" th:field="*{fechafin}" required />
+          </div>
+          <div class="field">
+            <label for="horainicio">Hora de inicio</label>
+            <input type="time" id="horainicio" th:field="*{horainicio}" required />
+          </div>
+          <div class="field">
+            <label for="horafin">Hora de fin</label>
+            <input type="time" id="horafin" th:field="*{horafin}" required />
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <a class="btn btn-ghost" th:href="@{'/menuUsuario/planta/' + ${aula.planta.id} + '/aulas'}">Cancelar</a>
+        <button type="submit" class="btn btn-primary"><svg class="icon"><use href="#i-check"/></svg>Confirmar reserva</button>
+      </div>
+    </form>
+  </div>
+</main>
+</body>
 </html>

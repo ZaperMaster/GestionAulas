@@ -1,60 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tipo de Aulas 🏫</title>
-
-    <!-- Google Fonts: Montserrat -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-
-    <!-- Enlace al CSS -->
-    <link rel="stylesheet" href="css/tipoaula_list.css" />
-  </head>
-  <body>
-    <header>
-      <h1>📋 Listado de Tipos de Aula</h1>
-    </header>
-
-    <!-- Contenedor de tarjetas -->
-    <div class="card-container">
-      <!-- Se genera una tarjeta por cada tipo de aula -->
-      <div class="card" th:each="ta : ${tipoAulas}">
-        <div class="card-content">
-          <h2 th:text="${ta.nombretipo}">Nombre Tipo</h2>
-          <p>
-            <strong>ID:</strong>
-            <span th:text="${ta.id}">ID</span>
-          </p>
-          <p>
-            <strong>Descripción:</strong>
-            <span th:text="${ta.descripcion}">Descripción</span>
-          </p>
-          <p>
-            <strong>Activo:</strong>
-            <span th:text="${ta.activo} ? '✅ Sí' : '❌ No'">Activo</span>
-          </p>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Tipos de aula')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<div class="shell">
+  <aside th:replace="fragments/layout :: adminNav('tipoaulas')"></aside>
+  <div>
+    <header th:replace="fragments/layout :: adminTopbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <div>
+          <p class="eyebrow">Infraestructura</p>
+          <h1>Tipos de aula</h1>
+          <p class="subtitle">Clasificación de las aulas: informática, laboratorio, salón de actos…</p>
         </div>
-        <div class="card-actions">
-          <a th:href="@{'/tipoaulas/editar/' + ${ta.id}}" class="btn-edit">✏️ Editar</a>
-          <form th:action="@{'/tipoaulas/borrar/' + ${ta.id}}" method="post" style="display:inline;margin:0"
-                onsubmit="return confirm('¿Está seguro de borrar este Tipo de Aula?');">
-            <button type="submit" class="btn-delete">🗑️ Borrar</button>
-          </form>
+        <a class="btn btn-primary" th:href="@{/tipoaulas/nuevo}"><svg class="icon"><use href="#i-plus"/></svg>Nuevo tipo de aula</a>
+      </div>
+      <div th:replace="fragments/layout :: flash"></div>
+
+      <div class="card">
+        <div class="empty" th:if="${#lists.isEmpty(tipoAulas)}">
+          <span class="empty-icon"><svg class="icon"><use href="#i-tag"/></svg></span>
+          <h3>Todavía no hay tipos de aula</h3>
+          <p>Crea el primero con el botón de arriba.</p>
+          <a class="btn btn-primary" th:href="@{/tipoaulas/nuevo}"><svg class="icon"><use href="#i-plus"/></svg>Nuevo tipo de aula</a>
+        </div>
+        <div class="table-wrap" th:unless="${#lists.isEmpty(tipoAulas)}">
+          <table class="table">
+            <thead><tr><th>Nombre</th><th>Descripción</th><th>Estado</th><th><span class="sr-only">Acciones</span></th></tr></thead>
+            <tbody>
+              <tr th:each="ta : ${tipoAulas}">
+                <td><div class="cell-title" th:text="${ta.nombretipo}">Nombre</div><div class="id" th:text="'#' + ${ta.id}">#1</div></td>
+                <td class="cell-sub" th:text="${ta.descripcion} ?: '—'">Descripción</td>
+                <td><span th:replace="fragments/layout :: estado(${ta.activo})"></span></td>
+                <td class="actions">
+                  <a class="btn btn-ghost btn-sm btn-icon" th:href="@{'/tipoaulas/editar/' + ${ta.id}}" title="Editar" aria-label="Editar"><svg class="icon"><use href="#i-edit"/></svg></a>
+                  <form th:action="@{'/tipoaulas/borrar/' + ${ta.id}}" method="post" data-confirm="¿Borrar este tipo de aula?">
+                    <button type="submit" class="btn btn-ghost btn-sm btn-icon btn-icon-danger" title="Borrar" aria-label="Borrar"><svg class="icon"><use href="#i-trash"/></svg></button>
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <!-- Fin de la tarjeta -->
-    </div>
-
-    <!-- Contenedor de botones globales -->
-    <div class="btn-container">
-      <a th:href="@{/tipoaulas/nuevo}" class="btn">➕ Crear Nuevo Tipo de Aula</a>
-      <a th:href="@{/menu}" class="btn-secondary">🏠 Volver al Menú</a>
-    </div>
-  </body>
+    </main>
+  </div>
+</div>
+</body>
 </html>

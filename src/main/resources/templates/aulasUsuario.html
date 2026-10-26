@@ -1,68 +1,58 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aulas de [[${planta.descripcion}]]</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Ajusta la ruta a tu CSS real -->
-    <link
-      rel="stylesheet"
-      th:href="@{/css/aulasUsuario.css}"
-      href="css/aulasUsuario.css"
-    />
-  </head>
-  <body>
-    <div class="container">
-      <!-- Título de la página -->
-      <h2>
-        🏫 Aulas de la planta
-        <span th:text="${planta.descripcion}">Planta</span>
-      </h2>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Aulas')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<header th:replace="fragments/layout :: userNav('edificios')"></header>
+<main class="page">
+  <nav class="breadcrumb" aria-label="Ruta">
+    <a th:href="@{/menuUsuario}">Edificios</a>
+    <svg class="icon"><use href="#i-chevron"/></svg>
+    <a th:href="@{'/menuUsuario/edificio/' + ${planta.edificio.id} + '/plantas'}" th:text="${planta.edificio.descripcion}">Edificio</a>
+    <svg class="icon"><use href="#i-chevron"/></svg>
+    <span aria-current="page" th:text="${planta.descripcion}">Planta</span>
+  </nav>
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Paso 3 de 3</p>
+      <h1>Elige un aula</h1>
+      <p class="subtitle">Aulas de <b th:text="${planta.descripcion}">la planta</b> en <span th:text="${planta.edificio.descripcion}">el edificio</span>.</p>
+    </div>
+  </div>
 
-      <!-- Si no hay aulas en esta planta -->
-      <div th:if="${#lists.isEmpty(aulas)}">
-        <p class="empty-message">
-          😞 No hay aulas disponibles para esta planta.
-        </p>
-      </div>
+  <div class="card empty" th:if="${#lists.isEmpty(aulas)}">
+    <span class="empty-icon"><svg class="icon"><use href="#i-door"/></svg></span>
+    <h3>No hay aulas en esta planta</h3>
+    <p>Prueba con otra planta del edificio.</p>
+    <a class="btn btn-secondary" th:href="@{'/menuUsuario/edificio/' + ${planta.edificio.id} + '/plantas'}"><svg class="icon"><use href="#i-arrow-left"/></svg>Volver a plantas</a>
+  </div>
 
-      <!-- Contenedor en cuadrícula para las aulas -->
-      <div class="aulas-grid">
-        <!-- Recorremos la lista de aulas -->
-        <div th:each="aula : ${aulas}" class="aula-card">
-          <div class="aula-content">
-            <p>
-              📛 <strong>Nombre:</strong>
-              <span th:text="${aula.nombreaula}">Nombre</span>
-            </p>
-            <p>
-              👥 <strong>Capacidad:</strong>
-              <span th:text="${aula.capacidad}">0</span>
-            </p>
-            <!-- Puedes agregar más campos, ej.: proyector, smartTV, etc. -->
-          </div>
-          <!-- Botón para reservar el aula; redirige a la URL de reservas para el aula en cuestión -->
-          <a th:href="@{'/reservas/aula/' + ${aula.id}}" class="btn"
-            >✅ Reservar</a
-          >
+  <div class="grid-cards" th:unless="${#lists.isEmpty(aulas)}">
+    <article class="card place-card" th:each="aula : ${aulas}">
+      <div class="place-cover alt2"><svg class="icon"><use href="#i-door"/></svg></div>
+      <div class="place-body">
+        <div>
+          <h3 th:text="${aula.nombreaula}">Aula</h3>
+          <p class="muted" th:if="${aula.descripcion}" th:text="${aula.descripcion}" style="font-size: 14px; margin-top: 2px">Descripción</p>
+        </div>
+        <div class="meta">
+          <span th:if="${aula.capacidad != null}"><svg class="icon"><use href="#i-users"/></svg><span th:text="${aula.capacidad} + ' plazas'">30 plazas</span></span>
+          <span th:if="${aula.tipoAula != null}"><svg class="icon"><use href="#i-tag"/></svg><span th:text="${aula.tipoAula.nombretipo}">Tipo</span></span>
+          <span th:if="${aula.nenchufes != null}"><svg class="icon"><use href="#i-plug"/></svg><span th:text="${aula.nenchufes} + ' enchufes'">0</span></span>
+        </div>
+        <div class="equip">
+          <span class="badge badge-primary badge-plain" th:if="${aula.proyector}">Proyector</span>
+          <span class="badge badge-primary badge-plain" th:if="${aula.smarttv}">Smart TV</span>
+          <span class="badge badge-primary badge-plain" th:if="${aula.hdmi}">HDMI</span>
+          <span class="badge badge-primary badge-plain" th:if="${aula.appletv}">Apple TV</span>
+          <span class="badge badge-primary badge-plain" th:if="${aula.aireacondicionado}">Aire acondicionado</span>
         </div>
       </div>
-
-      <br />
-      <!-- Botón para volver a la vista de plantas de este edificio; redirige a la URL del menú de plantas -->
-      <a
-        th:href="@{'/menuUsuario/edificio/' + ${planta.edificio.id} + '/plantas'}"
-        class="btn volver-btn"
-      >
-        🔙 Volver
-      </a>
-    </div>
-  </body>
+      <div class="place-foot">
+        <a class="btn btn-primary btn-sm" th:href="@{'/reservas/aula/' + ${aula.id}}"><svg class="icon"><use href="#i-calendar"/></svg>Reservar</a>
+      </div>
+    </article>
+  </div>
+</main>
+</body>
 </html>

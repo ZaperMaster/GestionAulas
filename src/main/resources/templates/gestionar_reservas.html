@@ -1,86 +1,61 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Gestionar Reservas</title>
-    <!-- Google Fonts: Montserrat -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Enlace al CSS -->
-    <link rel="stylesheet" th:href="@{/css/gestionar_reservas.css}" />
-  </head>
-  <body>
-    <header>
-      <h1>Gestionar Reservas</h1>
-    </header>
-
-    <!-- Contenedor de tarjetas -->
-    <div class="card-container" th:if="${!#lists.isEmpty(reservas)}">
-      <!-- Tarjeta para cada reserva -->
-      <div class="card" th:each="reserva : ${reservas}">
-        <div class="card-content">
-          <p>
-            <strong>ID Reserva:</strong> 
-            <span th:text="${reserva.id}">1</span>
-          </p>
-          <p>
-            <strong>Aula:</strong>
-            <span th:text="${reserva.aula.nombreaula}">Aula</span>
-          </p>
-          <p>
-            <strong>Usuario:</strong>
-            <span th:text="${reserva.usuario.email}">usuario@example.com</span>
-          </p>
-          <p>
-            <strong>Curso:</strong>
-            <span th:text="${reserva.curso.descripcion}">Curso</span>
-          </p>
-          <p>
-            <strong>Fecha Inicio:</strong>
-            <span th:text="${reserva.fechainicio}">2025-01-01</span>
-          </p>
-          <p>
-            <strong>Fecha Fin:</strong>
-            <span th:text="${reserva.fechafin}">2025-01-10</span>
-          </p>
-          <p>
-            <strong>Hora Inicio:</strong>
-            <span th:text="${reserva.horainicio}">10:00</span>
-          </p>
-          <p>
-            <strong>Hora Fin:</strong>
-            <span th:text="${reserva.horafin}">12:00</span>
-          </p>
-          <p>
-            <strong>Estado Validación:</strong>
-            <!-- Se asume que se usa la propiedad "validar"; si no existe, se podría usar "activo" -->
-            <span th:text="${reserva.validar} == true ? 'Validado' : 'No validado'">
-              Estado
-            </span>
-          </p>
-        </div>
-        <div class="card-actions">
-          <a th:href="@{'/gestionarReservas/editar/' + ${reserva.id}}" class="btn-edit">
-            ✏️ Editar
-          </a>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Reservas')"></head>
+<body>
+<svg th:replace="fragments/layout :: icons"></svg>
+<div class="shell">
+  <aside th:replace="fragments/layout :: adminNav('reservas')"></aside>
+  <div>
+    <header th:replace="fragments/layout :: adminTopbar"></header>
+    <main class="content">
+      <div class="page-header">
+        <div>
+          <p class="eyebrow">Gestión</p>
+          <h1>Reservas</h1>
+          <p class="subtitle">Todas las reservas de aulas. Valida las pendientes para confirmarlas.</p>
         </div>
       </div>
-    </div>
+      <div th:replace="fragments/layout :: flash"></div>
 
-    <!-- Mensaje cuando no hay reservas -->
-    <div class="no-data" th:if="${#lists.isEmpty(reservas)}">
-      <p>No hay reservas disponibles.</p>
-    </div>
-
-    <footer>
-      <a th:href="@{/menu}" class="btn btn-back">🏠 Volver al Menú</a>
-    </footer>
-
-    <script src="js/gestionar_reservas.js"></script>
-  </body>
+      <div class="card">
+        <div class="empty" th:if="${#lists.isEmpty(reservas)}">
+          <span class="empty-icon"><svg class="icon"><use href="#i-calendar"/></svg></span>
+          <h3>No hay reservas</h3>
+          <p>Cuando los usuarios reserven aulas, aparecerán aquí.</p>
+        </div>
+        <div class="table-wrap" th:unless="${#lists.isEmpty(reservas)}">
+          <table class="table">
+            <thead><tr><th>Aula</th><th>Usuario</th><th>Curso</th><th>Fechas</th><th>Horario</th><th>Estado</th><th><span class="sr-only">Acciones</span></th></tr></thead>
+            <tbody>
+              <tr th:each="reserva : ${reservas}">
+                <td><div class="cell-title" th:text="${reserva.aula.nombreaula}">A-101</div><div class="id" th:text="'#' + ${reserva.id}">#1</div></td>
+                <td th:text="${reserva.usuario.email}">usuario@correo.com</td>
+                <td th:text="${reserva.curso.descripcion}">Curso</td>
+                <td>
+                  <span th:text="${reserva.fechainicio != null ? #temporals.format(reserva.fechainicio, 'dd/MM/yyyy') : '—'}">01/01/2026</span>
+                  <div class="cell-sub" th:if="${reserva.fechafin != null and reserva.fechafin != reserva.fechainicio}" th:text="'hasta ' + ${#temporals.format(reserva.fechafin, 'dd/MM/yyyy')}">hasta</div>
+                </td>
+                <td th:text="${reserva.horainicio != null ? reserva.horainicio + ' – ' + reserva.horafin : '—'}">09:00 – 11:00</td>
+                <td>
+                  <span class="badge badge-success" th:if="${reserva.validar == true}">Validada</span>
+                  <span class="badge badge-warning" th:unless="${reserva.validar == true}">Pendiente</span>
+                </td>
+                <td class="actions">
+                  <form th:action="@{/gestionarReservas/editar}" method="post">
+                    <input type="hidden" name="id" th:value="${reserva.id}" />
+                    <input type="hidden" name="validar" th:value="${reserva.validar != true}" />
+                    <button type="submit" class="btn btn-secondary btn-sm" th:if="${reserva.validar != true}"><svg class="icon"><use href="#i-check"/></svg>Validar</button>
+                    <button type="submit" class="btn btn-ghost btn-sm" th:if="${reserva.validar == true}">Quitar validación</button>
+                  </form>
+                  <a class="btn btn-ghost btn-sm btn-icon" th:href="@{'/gestionarReservas/editar/' + ${reserva.id}}" title="Ver detalle" aria-label="Ver detalle"><svg class="icon"><use href="#i-arrow-right"/></svg></a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
 </html>
