@@ -1,5 +1,10 @@
 # 🏫 GestionAulas
 
+[![Build](https://github.com/ZaperMaster/GestionAulas/actions/workflows/build.yml/badge.svg)](https://github.com/ZaperMaster/GestionAulas/actions/workflows/build.yml)
+![Java](https://img.shields.io/badge/Java-17-B07219?logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-2.6-6DB33F?logo=springboot&logoColor=white)
+[![Licencia: MIT](https://img.shields.io/badge/licencia-MIT-green)](LICENSE)
+
 Aplicación web para gestionar los edificios, plantas y aulas de un centro educativo y
 **reservar aulas** para impartir cursos. Hecha con **Spring Boot 2.6**, **Spring Security**,
 **Thymeleaf** y **MySQL**.
@@ -131,6 +136,10 @@ src/main/resources/
 mysql/gestoraulas.sql              Script de la base de datos
 mysql/datos_ejemplo.sql            Datos de ejemplo
 ```
+
+## Licencia
+
+[MIT](LICENSE).
 
 ## Autor
 
