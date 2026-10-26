@@ -66,6 +66,11 @@ Aplicación web para gestionar los edificios, plantas y aulas de un centro educa
 
 ## Puesta en marcha
 
+> **¿Solo quieres probarla?** Descarga `gestion-aulas-1.0.0.jar` de la
+> [última release](https://github.com/ZaperMaster/GestionAulas/releases/latest), arranca MySQL
+> y ejecuta `java -jar gestion-aulas-1.0.0.jar`. No necesitas compilar nada.
+
+
 1. Arranca MySQL. Por defecto la aplicación se conecta a `localhost:3306` con el usuario
    `root` y la contraseña `root`, y crea la base de datos `gestoraulas` si no existe.
 2. Arranca la aplicación:
