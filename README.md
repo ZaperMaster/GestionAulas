@@ -9,6 +9,29 @@ Aplicación web para gestionar los edificios, plantas y aulas de un centro educa
 **reservar aulas** para impartir cursos. Hecha con **Spring Boot 2.6**, **Spring Security**,
 **Thymeleaf** y **MySQL**.
 
+## Capturas
+
+<p align="center">
+  <img src="docs/capturas/admin-panel.png" alt="Panel de administración" width="900">
+</p>
+
+| Reservar: elegir aula | Reservar: formulario |
+|---|---|
+| ![Aulas de una planta con su equipamiento](docs/capturas/reservar-aulas.png) | ![Formulario de reserva](docs/capturas/reservar-formulario.png) |
+| **Gestión de reservas** | **Aulas (administración)** |
+| ![Listado de reservas para validar](docs/capturas/admin-reservas.png) | ![Listado de aulas](docs/capturas/admin-aulas.png) |
+| **Modo oscuro** | **Inicio de sesión** |
+| ![Panel en modo oscuro](docs/capturas/admin-panel-oscuro.png) | ![Inicio de sesión](docs/capturas/login.png) |
+
+<details>
+<summary>Más capturas</summary>
+
+| Elegir edificio | Mis reservas | Móvil |
+|---|---|---|
+| ![Edificios](docs/capturas/reservar-edificios.png) | ![Mis reservas](docs/capturas/mis-reservas.png) | ![Mis reservas en el móvil](docs/capturas/movil-mis-reservas.png) |
+
+</details>
+
 ## Funcionalidades
 
 ### Usuario
