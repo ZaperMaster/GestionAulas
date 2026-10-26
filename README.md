@@ -167,7 +167,7 @@ mysql/datos_ejemplo.sql            Datos de ejemplo
 
 ## Licencia
 
-[MIT](LICENSE) ([traducción al español](LICENCIA.md)).
+[MIT](LICENSE).
 
 ## Autor
 
