@@ -86,6 +86,21 @@ tipos de usuario:
 mysql -u root -p < mysql/gestoraulas.sql
 ```
 
+### Datos de ejemplo
+
+Para probar la aplicación con datos realistas, carga [`mysql/datos_ejemplo.sql`](mysql/datos_ejemplo.sql)
+después de arrancarla una vez:
+
+```bash
+mysql -u root -p --default-character-set=utf8mb4 gestoraulas < mysql/datos_ejemplo.sql
+```
+
+Añade 5 edificios, 11 plantas, más de 30 aulas con su equipamiento, tipos de aula, usos,
+familias, 9 cursos, 4 usuarios y algunas reservas. Se puede ejecutar varias veces sin
+duplicar nada. Los usuarios de ejemplo (`lucia.martin@aulas.test`, `javier.ruiz@aulas.test`,
+`marta.lopez@aulas.test` y `daniel.navarro@aulas.test`) tienen la contraseña `Ejemplo2026!`;
+son solo para pruebas.
+
 Modelo de datos:
 
 ```
@@ -114,6 +129,7 @@ src/main/resources/
 │   └── fragments/layout.html      Cabecera, menús, iconos y piezas comunes
 └── static/                        app.css y app.js (estilos y comportamiento comunes)
 mysql/gestoraulas.sql              Script de la base de datos
+mysql/datos_ejemplo.sql            Datos de ejemplo
 ```
 
 ## Autor
