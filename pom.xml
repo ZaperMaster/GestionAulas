@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.alejandronieves</groupId>
 	<artifactId>gestion-aulas</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>GestionAulas</name>
 	<description>Gestión y reserva de aulas con Spring Boot, Thymeleaf y MySQL</description>
 	<properties>
@@ -48,6 +48,21 @@
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>

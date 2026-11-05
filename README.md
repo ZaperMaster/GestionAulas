@@ -37,7 +37,7 @@ Aplicación web para gestionar los edificios, plantas y aulas de un centro educa
 ### Usuario
 - Registro con DNI, nombre, email, contraseña y teléfono.
 - Navegación **edificio → planta → aula**, con la capacidad, el tipo y el equipamiento de cada aula.
-- Reserva de un aula para un curso, con fecha y horario.
+- Reserva de un aula para un curso, con fecha y horario. No se puede reservar un aula ya ocupada.
 - **Mis reservas**: consulta y cancelación de las reservas propias.
 
 ### Administrador
@@ -66,9 +66,9 @@ Aplicación web para gestionar los edificios, plantas y aulas de un centro educa
 
 ## Puesta en marcha
 
-> **¿Solo quieres probarla?** Descarga `gestion-aulas-1.0.0.jar` de la
+> **¿Solo quieres probarla?** Descarga `gestion-aulas-1.0.1.jar` de la
 > [última release](https://github.com/ZaperMaster/GestionAulas/releases/latest), arranca MySQL
-> y ejecuta `java -jar gestion-aulas-1.0.0.jar`. No necesitas compilar nada.
+> y ejecuta `java -jar gestion-aulas-1.0.1.jar`. No necesitas compilar nada.
 
 
 1. Arranca MySQL. Por defecto la aplicación se conecta a `localhost:3306` con el usuario
@@ -142,6 +142,15 @@ USOAULA 1──n SUBUSOAULA 1──n FAMCURSO 1──n CURSO
 RESERVA: AULA + USUARIO + CURSO + fechas y horario (activo, validar)
 USUARIO n──1 TIPOUSUARIO (1 = ADMIN, 3 = USER)
 ```
+
+## Tests
+
+```bash
+./mvnw test
+```
+
+Comprueban los permisos, el registro, los usuarios y las reservas con una base de datos en memoria,
+así que no hace falta tener MySQL en marcha. Se ejecutan también en cada cambio con GitHub Actions.
 
 ## Estructura
 

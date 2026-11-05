@@ -22,7 +22,7 @@ jobs:
           java-version: "17"
           cache: maven
 
-      - name: Compilar y empaquetar
+      - name: Compilar, ejecutar los tests y empaquetar
         run: |
           chmod +x mvnw
-          ./mvnw -B -ntp -DskipTests package
+          ./mvnw -B -ntp verify

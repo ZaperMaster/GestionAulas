@@ -44,7 +44,7 @@
                     <span class="badge badge-plain" th:if="${a.hdmi}">HDMI</span>
                     <span class="badge badge-plain" th:if="${a.appletv}">Apple TV</span>
                     <span class="badge badge-plain" th:if="${a.aireacondicionado}">A/A</span>
-                    <span class="muted" th:unless="${a.proyector or a.smarttv or a.hdmi or a.appletv or a.aireacondicionado}">—</span>
+                    <span class="muted" th:unless="${a.proyector == true or a.smarttv == true or a.hdmi == true or a.appletv == true or a.aireacondicionado == true}">—</span>
                   </div>
                 </td>
                 <td><span th:replace="fragments/layout :: estado(${a.activo == null or a.activo})"></span></td>

@@ -6,12 +6,14 @@ import com.alejandronieves.model.Reserva;
 import com.alejandronieves.model.Usuario;
 import com.alejandronieves.service.AulaService;
 import com.alejandronieves.service.CursoService;
+import com.alejandronieves.service.ReservaNoValidaException;
 import com.alejandronieves.service.ReservaService;
 import com.alejandronieves.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -61,8 +63,10 @@ public class ReservaController {
     // Procesa el formulario de reserva
     @PostMapping("/procesar")
     public String procesarReserva(@ModelAttribute("reserva") Reserva reserva,
+                                  BindingResult result,
                                   @RequestParam("cursoId") Long cursoId,
-                                  Authentication auth) {
+                                  Authentication auth,
+                                  Model model) {
         // El usuario siempre es el que ha iniciado sesión, nunca el que llegue en el formulario
         Usuario usuario = usuarioService.buscarPorEmail(auth.getName()).orElse(null);
         Aula aula = reserva.getAula() != null ? aulaService.findById(reserva.getAula().getId()) : null;
@@ -75,7 +79,19 @@ public class ReservaController {
         reserva.setAula(aula);
         reserva.setCurso(curso);
         reserva.setActivo(true);
-        reservaService.save(reserva);
+        try {
+            if (result.hasErrors()) {
+                throw new ReservaNoValidaException("Revisa las fechas y las horas de la reserva.");
+            }
+            reservaService.reservar(reserva);
+        } catch (ReservaNoValidaException e) {
+            // Se vuelve al formulario con el aviso y los datos que había escrito
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("aula", aula);
+            model.addAttribute("cursos", cursoService.listAll());
+            model.addAttribute("cursoId", cursoId);
+            return "reserva_form";
+        }
         return "redirect:/misreservas";
     }
 

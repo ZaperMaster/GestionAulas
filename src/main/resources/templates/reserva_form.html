@@ -55,8 +55,8 @@
           <div class="field full">
             <label for="cursoId">Curso</label>
             <select id="cursoId" name="cursoId" required>
-              <option value="" disabled selected>Selecciona un curso</option>
-              <option th:each="c : ${cursos}" th:value="${c.id}" th:text="${c.descripcion}">Curso</option>
+              <option value="" disabled th:selected="${cursoId == null}">Selecciona un curso</option>
+              <option th:each="c : ${cursos}" th:value="${c.id}" th:text="${c.descripcion}" th:selected="${cursoId == c.id}">Curso</option>
             </select>
           </div>
           <div class="field">
